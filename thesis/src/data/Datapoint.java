@@ -11,9 +11,14 @@ public class Datapoint implements Iterable<Double> {
 	
 	Datapoint(int pointID, DatapointTO to){
 		this.pointID = pointID;
+		LinkedList<Object> params = to.get();
 		
-		for(Object obj : to.get())
-			values.add((Double)obj);
+		for(int i = 2; i < params.size(); i++)
+			values.add((Double)params.get(i));
+	}
+	
+	public int getID(){
+		return this.pointID;
 	}
 	
 	public Double getValue(int idx){
