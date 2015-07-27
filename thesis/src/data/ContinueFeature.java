@@ -20,8 +20,7 @@ public class ContinueFeature extends Feature {
 			this.max = max;
 	}
 	
-	public double getScaled(double value){
-		//todo
-		return 0;
+	public double getScaled(double value){		
+		return (value - min) / (max - min);
 	}
 }

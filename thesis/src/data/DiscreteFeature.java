@@ -10,4 +10,8 @@ public class DiscreteFeature extends Feature {
 		this.values = values;
 	}
 	
+	public HashSet<String> getSet(){
+		return this.values;
+	}
+	
 }

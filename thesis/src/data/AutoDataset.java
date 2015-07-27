@@ -11,6 +11,11 @@ public class AutoDataset extends Data {
 		super(fvTO, stream);
 		this.a = a;
 		
+		//Prima lavora sull'autocorrelatione...
+		
+		//...e poi fa il reformat
+		super.reformatDataset();
+		
 	}
 
 }

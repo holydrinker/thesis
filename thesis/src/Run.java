@@ -13,25 +13,25 @@ import io.StreamGenerator;
 public class Run {
 
 	public static void main(String[] args) {
-		String fileName = "lol.txt";
+		String fileName = "inputFile.txt";
 		String datasetType = "dataset";
 		String autocorrelationType = "";
 		
-		//Costurisco transfer obejct
+		//Build transfer obejcts
 		StreamGenerator sg = new StreamGenerator(fileName);
 		FeatureVectorTO fvTO = sg.getFeatureVectorTO();
 		DataTO dataTO = sg.getDataTO();
 		
-		//Incapsulo tutto nei parametri da passare al factory
+		//Wrapping parameters and pass them to factory.
 		ArrayList<Object> params = new ArrayList<Object>();
 		params.add(fvTO);
 		params.add(dataTO);
 		params.add(autocorrelationType); //sarà nullo in caso di dataset senza autocorrelazione
 		
-		//Chiamo il factory per far istanziare il dataset
-		Data data = (Data)new DatasetFactory().getInstance(datasetType, params);
+		//Chiamo il factory per far istanziare il dataset, passando la scelta del dataset dell'utente e i parametri per la creazione del dataset
+		Data data = (Data)new DatasetFactory().getInstance(datasetType, params); 
 		
-		//TEST
+		//Test
 		FeatureVector fv = data.getFeatureVector();
 		for(Object obj : fv){
 			Feature f = (Feature)obj;
