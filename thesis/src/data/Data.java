@@ -4,21 +4,22 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.omg.Messaging.SyncScopeHelper;
+
 import io.DataTO;
 import io.DatapointTO;
 import io.FeatureVectorTO;
 
 public abstract class Data implements Iterable<Datapoint> {
-	protected FeatureVector fv;
+	private FeatureVector fv;
 	public Datapoint[][] datapoints;
-	private static final int FIRST_VALUE = 2;
 	
 	public Data(FeatureVectorTO fvTO, DataTO stream) {
 		fv = new FeatureVector(fvTO);
 		
 		//BUILD MATRIX
 		int width = -1;
-		int hieght = -1;
+		int height = -1;
 		
 		for(Object obj : stream.get()){
 			DatapointTO dpTO = (DatapointTO) obj;
@@ -29,10 +30,10 @@ public abstract class Data implements Iterable<Datapoint> {
 			
 			if(x > width)
 				width = x;
-			if(y > hieght)
-				hieght = y;			
+			if(y > height)
+				height = y;			
 		}
-		datapoints = new Datapoint[hieght][width];
+		datapoints = new Datapoint[width+1][height+1];
 		
 		//POPULATE MATRIX
 		int idGenerator = 0;
@@ -41,12 +42,12 @@ public abstract class Data implements Iterable<Datapoint> {
 			DatapointTO dpTO = (DatapointTO) obj;
 			LinkedList<Object> params = dpTO.get();
 			
-			int x = ((Double)params.get(0)).intValue() - 1; //warning. It may cause bugs
-			int y = ((Double)params.get(1)).intValue() - 1;
+			int x = ((Double)params.get(0)).intValue();
+			int y = ((Double)params.get(1)).intValue();
 			
 			Datapoint dp = new Datapoint(idGenerator++, dpTO);
 			dp.updateMinMax(fv); //update min and max for the feature
-			datapoints[y][x] = dp;
+			datapoints[x][y] = dp;
 		}
 		
 		
@@ -98,8 +99,8 @@ public abstract class Data implements Iterable<Datapoint> {
 	@Override
 	public Iterator<Datapoint> iterator() {
 		return new Iterator<Datapoint>(){
-			int height = datapoints.length;
 			int width = datapoints[0].length;
+			int height = datapoints.length;
 			int x = 0;
 			int y = 0;
 			
@@ -109,6 +110,7 @@ public abstract class Data implements Iterable<Datapoint> {
 					x = 0;
 					y++;
 				}
+				
 				if(y == height)
 					return false;
 				else

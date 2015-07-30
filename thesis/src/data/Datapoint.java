@@ -8,12 +8,13 @@ import java.util.LinkedList;
 public class Datapoint implements Iterable<Double> {
 	private int pointID;
 	private LinkedList<Double> values = new LinkedList<Double>();
+	private static final int FIRST_VALUE = 2;
 	
 	Datapoint(int pointID, DatapointTO to){
 		this.pointID = pointID;
 		LinkedList<Object> params = to.get();
 		
-		for(int i = 2; i < params.size(); i++)
+		for(int i = FIRST_VALUE; i < params.size(); i++)
 			values.add((Double)params.get(i));
 	}
 	
@@ -31,7 +32,7 @@ public class Datapoint implements Iterable<Double> {
 	
 	void updateMinMax(FeatureVector fv){
 		for(Object f : fv){
-			int i = 2;
+			int i = FIRST_VALUE;
 			
 			if((Feature)f instanceof ContinueFeature){
 				ContinueFeature cf = (ContinueFeature) f;

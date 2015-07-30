@@ -10,4 +10,10 @@ public abstract class Feature {
 	public String getName(){
 		return this.name;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		Feature f = (Feature) obj;
+		return this.getName().equals(f.getName());
+	}
 }
