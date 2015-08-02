@@ -2,7 +2,7 @@ package autocorrelation;
 
 import data.Datapoint;
 
-class Record{
+public class Record {
 	short x;
 	short y;
 	Datapoint dp;

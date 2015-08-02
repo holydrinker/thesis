@@ -1,33 +1,32 @@
 package autocorrelation;
 
+import java.util.HashSet;
+
+import data.Data;
 import data.Datapoint;
-import data.Dataset;
 import data.Feature;
 import distance.WeightI;
 
 public class GetisOrdSingleFeature {
 	private Feature f;
-	private Neighborhood neighborhood;
+	private HashSet<Record> neighborhood;
 	private WeightI weight;
 	
-	//Salvo in queste variabili tutto ciò che serve per il calcolo finale di numeratore e denominatore
+	//Saving variables that are usefull in computing NUM and DEN
 	private double z = 0d;
 	private short featureIdx;
 	
-	public GetisOrdSingleFeature(Feature f, Neighborhood neighborhood, WeightI weight) {
+	public GetisOrdSingleFeature(Feature f, HashSet<Record> neighborhood, WeightI weight) {
 		this.f = f;
 		this.neighborhood = neighborhood;
 		this.weight = weight;
 	}
 	
-	double compute(Dataset data, short x, short y){
+	double compute(Data data, short x, short y){
 		double S = computeS(data, x, y);
-		double L = computeL(data, x, y); //Basterebbe calcolarlo una sola volta
+		double L = computeL(data, x, y); //I can compute them just one time (maybe in GetisOrd class) for each feature. It may been optimized.
 		
-		/*
-		 * Calcolo separatamente il numeratore e denominatore.
-		 * Con un unico ciclo posso calcolare l'intero numeratore e la sommatoria del denominatore 
-		 */
+		//Using just one loop I can compute NUM and DEN (just SUM)
 		double num = 0d;
 		double sumDen = 0d;
 		
@@ -36,22 +35,23 @@ public class GetisOrdSingleFeature {
 			double zj = (r.dp).getValue(featureIdx);
 			double lij = weight.compute(x, y, r.x, r.y);
 			
-			num += (lij * zj) - z * L;
+			num += (lij * zj) - (z * L);
 			sumDen += (Math.pow(lij, 2) - Math.pow(L, 2));
 		}
 		
-		//a questo punto il numeratore è già completo, va completato il calcolo del denominatore
-		short n = neighborhood.size();
+		//NUM done. Completing DEN
+		short n = (short) (neighborhood.size());
 		double den = (S/(n-1)) *  (n * sumDen);
 				
 		return num / den;
 	}
 	
-	private double computeS(Dataset data, short x, short y){
-		Datapoint dp = data.datapoints[y][x];
+	//Computing S^2
+	private double computeS(Data data, short x, short y){
+		Datapoint dp = data.getDatapoint(x,y);
 		
 		double sum = 0d;
-		short n = neighborhood.size();
+		short n = (short) (neighborhood.size());
 		featureIdx = 0;
 		
 		/*
@@ -68,27 +68,28 @@ public class GetisOrdSingleFeature {
 					Record r = (Record) neighbour;
 					z += (r.dp).getValue(featureIdx);
 				}
-				z += dp.getValue(featureIdx); //datapoint in questione
-				z = z / n;
+				z += dp.getValue(featureIdx); //add datapoint value to his neighbours' values
+				z = z / (n+1); //neighbour + datapoint
 				break;
 			}
 			else
 				featureIdx++;
 		}
 		
-		//Calcolo la sommatoria. Qui conosco già la posizione del valore della feature, perchè ho salvato la variabile i dal ciclo precedente
+		//Compute the SUMMATORY. I know the feature index yet, 'cause I saved it in variable featureIdx, so...
 		for(Object neighbour : neighborhood){
 			Record r = (Record) neighbour;
-			Datapoint nb = r.dp;
-			double zj = nb.getValue(featureIdx);
+			double zj = (r.dp).getValue(featureIdx);
 			sum += Math.pow((zj - z), 2);
 		}
+		//In the end, add datapoint value
+		sum += dp.getValue(featureIdx);
 		
-		//restituisco la sommatoria diviso n
 		return sum / n; 
 	}
 	
-	private double computeL(Dataset data, short x, short y){
+	//Computing Lambda(i)
+	private double computeL(Data data, short x, short y){
 		double sum = 0d;
 		
 		for(Object neighbour : neighborhood){

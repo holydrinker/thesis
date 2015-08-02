@@ -32,14 +32,14 @@ public class Datapoint implements Iterable<Double> {
 	
 	void updateMinMax(FeatureVector fv){
 		for(Object f : fv){
-			int i = FIRST_VALUE;
+			int valueIdx = 0;
 			
 			if((Feature)f instanceof ContinueFeature){
 				ContinueFeature cf = (ContinueFeature) f;
-				cf.setMax(this.getValue(i));
-				cf.setMin(this.getValue(i));
+				cf.setMax(this.getValue(valueIdx));
+				cf.setMin(this.getValue(valueIdx));
 			}
-			i++;
+			valueIdx++;
 		}
 	}
 

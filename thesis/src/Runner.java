@@ -4,7 +4,7 @@ import autocorrelation.AcFactory;
 import autocorrelation.AutocorrelationI;
 import data.Data;
 import data.Datapoint;
-import data.DatasetFactory;
+import data.DataFactory;
 import data.Feature;
 import data.FeatureVector;
 import io.DataTO;
@@ -13,37 +13,45 @@ import io.StreamGenerator;
 
 
 public class Runner {
-
+	//TESTARE SE I VALORI DI AUTOCORRELAZIONE HANNO SENSO
 	public static void main(String[] args) {
-		//Input args
-		String fileName = "inputFile.txt";
-		String datasetType = "dataset"; //Inserire DATASET per il dataset normale oppure AUTO per il dataset ottenuto con le autocorrelazioni
-		String autocorrelationType = "GO"; //Inserire GO per l'autocorrelazione GO o NONE per lavorare senza autocorrelazione
-		String radius = "2";
-		String q = "3";
+		//Console args
+		String fileName = "D:/dataset/inputFile.txt";
+		String datasetType = "auto"; //DATASET or AUTO lower case
+		String autocorrelationType = null;
+		String radius = null;
+		String q = null;
+		
+		//If you choose autocorrelation 
+		AutocorrelationI ac = null;
+		if(datasetType.equalsIgnoreCase("auto")){
+			autocorrelationType = "GO"; //GO to use GetisOrd
+			radius = "3";
+			q = "3";
+			
+			//Wrapping args to call factory for Autocorrelation
+			ArrayList<Object> paramsAc = new ArrayList<Object>();
+			paramsAc.add((short)Integer.parseInt(radius));
+			paramsAc.add((byte)Integer.parseInt(q));
+			ac = (AutocorrelationI) new AcFactory().getInstance(autocorrelationType, paramsAc);
+		}
 		
 		//Build transfer obejcts
 		StreamGenerator sg = new StreamGenerator(fileName);
 		FeatureVectorTO fvTO = sg.getFeatureVectorTO();
 		DataTO dataTO = sg.getDataTO();
 		
-		//Wrapping args to call factory for Autocorrelation
-		ArrayList<Object> paramsAc = new ArrayList<Object>();
-		paramsAc.add((short)Integer.parseInt(radius));
-		paramsAc.add((byte)Integer.parseInt(q));
-		AutocorrelationI ac = (AutocorrelationI) new AcFactory().getInstance(autocorrelationType, paramsAc);
-		
-		//Wrapping parameters and pass them to factory.
+		//Wrapping parameters and pass them to data factory.
 		ArrayList<Object> paramsData = new ArrayList<Object>();
 		paramsData.add(fvTO);
 		paramsData.add(dataTO);
 		paramsData.add(ac);
-		paramsData.add((short)Integer.parseInt(radius));
+		paramsData.add(radius);
 		
-		//Chiamo il factory per far istanziare il dataset, passando la scelta del dataset dell'utente e i parametri per la creazione del dataset
-		Data data = (Data)new DatasetFactory().getInstance(datasetType, paramsData); 
+		//User customized dataset creation
+		Data data = (Data)new DataFactory().getInstance(datasetType, paramsData); 
 		
-		//Print Test
+		//PRINTING TEST...
 		FeatureVector fv = data.getFeatureVector();
 		for(Object obj : fv){
 			Feature f = (Feature)obj;

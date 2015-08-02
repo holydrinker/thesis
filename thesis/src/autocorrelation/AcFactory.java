@@ -3,7 +3,6 @@ package autocorrelation;
 import java.util.List;
 
 import data.Factory;
-import distance.EuclideanDistance;
 import distance.InverseWeight;
 
 public class AcFactory implements Factory {

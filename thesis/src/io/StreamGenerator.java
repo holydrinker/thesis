@@ -14,7 +14,7 @@ public class StreamGenerator {
 	private DataTO dataTO;
 	private BufferedReader br;
 	
-	public StreamGenerator(String fileName) {
+	public StreamGenerator(String filePath) {
 		LinkedList<Object> fvParams = new LinkedList<Object>();
 		LinkedList<Object> dataParams = new LinkedList<Object>();
 		
@@ -22,7 +22,7 @@ public class StreamGenerator {
 		String[] splittedLine;
 		
 		try {
-			br = new BufferedReader(new FileReader("D:/dataset/"+fileName));
+			br = new BufferedReader(new FileReader(filePath));
 			line = br.readLine();
 			
 			while(line != null){
