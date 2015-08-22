@@ -17,9 +17,22 @@ public class FeatureVector implements Iterable<Feature>{
 		return this.features.get(idx);
 	}
 	
+	void updateMinMax(Datapoint dp){
+		for(Object f : this){
+			int valueIdx = 0;
+			
+			if((Feature)f instanceof ContinueFeature){
+				ContinueFeature cf = (ContinueFeature) f;
+				cf.setMax(dp.getValue(valueIdx));
+				cf.setMin(dp.getValue(valueIdx));
+			}
+			valueIdx++;
+		}
+	}
+	
 	@Override
 	public Iterator<Feature> iterator() {
 		return features.iterator();
 	}
-
+	
 }

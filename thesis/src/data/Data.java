@@ -44,11 +44,9 @@ public abstract class Data implements Iterable<Datapoint> {
 			int y = ((Double)params.get(1)).intValue() - 1;
 			
 			Datapoint dp = new Datapoint(idGenerator++, dpTO);
-			dp.updateMinMax(fv); //update min and max for the feature
+			fv.updateMinMax(dp); //update min and max for the feature
 			datapoints[x][y] = dp;
 		}
-		
-		
 		
 	}
 	

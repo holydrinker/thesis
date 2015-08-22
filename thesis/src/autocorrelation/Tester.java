@@ -18,7 +18,7 @@ public class Tester {
 		//Datapoint da autocorrelare
 		short x = 0;
 		short y = 0;
-		short radius = 3;
+		short radius = 1;
 		Datapoint dp = go.compute(data, x, y, radius);
 		
 		//Printing test
