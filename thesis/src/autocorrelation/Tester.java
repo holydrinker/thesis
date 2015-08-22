@@ -8,6 +8,8 @@ import io.StreamGenerator;
 public class Tester {
 
 	public static void main(String[] args) {
+		System.out.println("autocorrelation.Tester");
+		
 		//Giusto un dataset per il testing del package
 		StreamGenerator sg = new StreamGenerator("D:/dataset/inputFile.txt");
 		Dataset data = new Dataset(sg.getFeatureVectorTO(), sg.getDataTO());
@@ -21,10 +23,12 @@ public class Tester {
 		//Datapoint da autocorrelare
 		short x = 0;
 		short y = 0;
+		System.out.println("Calcolo del vicinato del datapoint in posizione [" + x + "]["+y+"]");
+		System.out.println("radius: " + radius);
+		System.out.println("Test effettuato solo sui valori corrispondenti alla seconda feature");
 		Datapoint dp = go.compute(data, x, y, radius);
 		
 		//Print
-		System.out.println("autocorrelation.Tester");
 		int i = 0;
 		for(Object value : dp)
 			if(i++ == 1)

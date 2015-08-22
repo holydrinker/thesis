@@ -15,11 +15,13 @@ public class GetisOrdSingleFeature {
 	//Saving variables that are usefull in computing NUM and DEN
 	private double z = 0d;
 	private short featureIdx;
+	private short n;
 	
 	public GetisOrdSingleFeature(Feature f, HashSet<Record> neighborhood, WeightI weight) {
 		this.f = f;
 		this.neighborhood = neighborhood;
 		this.weight = weight;
+		this.n = (short) (neighborhood.size() + 1); //Neighbour size + central datapoint
 	}
 	
 	double compute(Data data, short x, short y){
@@ -37,25 +39,37 @@ public class GetisOrdSingleFeature {
 			Datapoint dp = (r.dp);
 			
 			double zj = dp.getValue(featureIdx);
-			double lij = weight.compute(x, y, dpX, dpY);
+			double lij = weight.compute(x, y, dpX, dpY); //LAMBDA PROBLEM
 			
 			num += (lij * zj) - (z * L);
 			sumDen += (Math.pow(lij, 2) - Math.pow(L, 2));
 		}
+
+		/*
+		 * Per non far venire numeri negativi sotto aggiungo questo controllo, perchè molto spesso quando confronto il datapoint centrale con le celle
+		 * a distanza 1, quindi esattamente attaccante, il peso, calcolato così: 1 / (distanza^q) viene sempre 1, e quindi al denominatore all'interno
+		 * della sommatoria succede che 1 - LAMBDA^2 viene un numero negativo, che rende tutto il denominatore negativo e che quindi quando poi vado
+		 * a fare la radice quadrata del denominatore mi viene fuori un NaN, che mi rende tutto il valore NaN. Quindi mi conservo i segno e lo metto
+		 * davanti al valore assoluto.
+		 */
 		
 		//NUM done. Completing DEN
-		short n = (short) (neighborhood.size());
 		double den = (S/(n-1)) *  (n * sumDen);
-				
-		return num / den;
+		double denSqrt = Math.sqrt(Math.abs(den));
+		
+		if(den < 0)
+			den = denSqrt * -1;
+		else
+			den = denSqrt;
+		
+		//System.out.println("num: " + num);
+		//System.out.println("den: " + den);
+		return num/den;
 	}
 	
 	//Computing S^2
 	private double computeS(Data data, short x, short y){
 		Datapoint dp = data.getDatapoint(x,y);
-		
-		double sum = 0d;
-		short n = (short) (neighborhood.size());
 		featureIdx = 0;
 		
 		/*
@@ -66,6 +80,8 @@ public class GetisOrdSingleFeature {
 		 */
 		
 		//Calcolo z segnato prima sul vicinato e poi aggiungo il valore del datapoint in questione
+		
+		//Identifico la feature su cui lavorare e poi itero solo sul vicinato lavorando solo sulla feature che mi interessa
 		for(Object feature : data.getFeatureVector()){
 			if(((Feature)feature).equals(f)){	
 				for(Object neighbour : neighborhood){
@@ -73,7 +89,7 @@ public class GetisOrdSingleFeature {
 					z += (r.dp).getValue(featureIdx);
 				}
 				z += dp.getValue(featureIdx); //add datapoint value to his neighbours' values
-				z = z / (n+1); //neighbour + datapoint
+				z = z / n;
 				break;
 			}
 			else
@@ -81,13 +97,15 @@ public class GetisOrdSingleFeature {
 		}
 		
 		//Compute the SUMMATORY. I know the feature index yet, 'cause I saved it in variable featureIdx, so...
+		double sum = 0d;
 		for(Object neighbour : neighborhood){
 			Record r = (Record) neighbour;
 			double zj = (r.dp).getValue(featureIdx);
 			sum += Math.pow((zj - z), 2);
 		}
-		//In the end, add datapoint value
-		sum += dp.getValue(featureIdx);
+		//In the end, add central datapoint value
+		double zj = dp.getValue(featureIdx);
+		sum += Math.pow((zj - z), 2);
 		
 		return sum / n; 
 	}
