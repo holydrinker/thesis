@@ -23,13 +23,14 @@ public class GetisOrd implements AutocorrelationI {
 		//Compute datapoint's neighborhood
 		HashSet<Record> neighborhood = computeNeighborhood(data, x, y, radius);
 		
-		/*Neighborhood testing...
+		//Neighborhood testing...
+		System.out.println("|------------NEIGHBORHOOD--------------|");
 		for(Record r : neighborhood){
 			for(Object value : r.dp)
 				System.out.print(value + " ");
 			System.out.println("");
 		}
-		System.out.println("--------------------------------------");*/
+		System.out.println("|--------------------------------------|");
 		
 		//Compute a new autocorrelated valued for each continue feature
 		int i = 0; //use this to iterate over datapoint's values, skipping discrete features
@@ -45,6 +46,14 @@ public class GetisOrd implements AutocorrelationI {
 		return dp;
 	}
 	
+	/**
+	 * Compute the neighbodhood of the datapoint[x][y] into a range defined by radius
+	 * @param data
+	 * @param x
+	 * @param y
+	 * @param radius
+	 * @return
+	 */
 	private HashSet<Record> computeNeighborhood(Data data, short x, short y, short radius){
 		HashSet<Record> neighborhood = new HashSet<Record>();
 		
@@ -71,7 +80,10 @@ public class GetisOrd implements AutocorrelationI {
 		for(short loopX = startX; loopX <= endX; loopX++){
 			for(short loopY = startY; loopY <= endY; loopY++){
 				if(!(loopY == y && loopX == x)){
-					neighborhood.add(new Record(loopX, loopY, data.getDatapoint(loopX, loopY)));
+					//check if the neighbor if a null cell
+					if(!(data.getDatapoint(loopX, loopY) == null)){
+						neighborhood.add(new Record(loopX, loopY, data.getDatapoint(loopX, loopY)));
+					}
 				}
 			}
 		}

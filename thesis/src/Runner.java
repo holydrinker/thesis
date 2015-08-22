@@ -11,12 +11,18 @@ import io.DataTO;
 import io.FeatureVectorTO;
 import io.StreamGenerator;
 
+/*To-do list
+ * - controllare che non ci siano celle nulle
+ * - controllare che le autocorrelazioni con il vicinato abbiano senso
+ */
+
 
 public class Runner {
 	//TESTARE SE I VALORI DI AUTOCORRELAZIONE HANNO SENSO
+	
 	public static void main(String[] args) {
 		//Console args
-		String fileName = "D:/dataset/inputFile.txt";
+		String fileName = "D:/dataset/inputFile.txt"; //Il path e il nome del file saranno dei parametri
 		String datasetType = "auto"; //DATASET or AUTO lower case
 		String autocorrelationType = null;
 		String radius = null;

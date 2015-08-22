@@ -20,7 +20,7 @@ public abstract class Data implements Iterable<Datapoint> {
 		int height = -1;
 		
 		for(Object obj : stream.get()){
-			DatapointTO dpTO = (DatapointTO) obj;
+			DatapointTO dpTO = (DatapointTO) obj; //In pos 0 and in pos 1 DatapointTO contains the coordinates
 			LinkedList<Object> params = dpTO.get();
 			
 			int x = ((Double)params.get(0)).intValue() - 1;
@@ -44,7 +44,7 @@ public abstract class Data implements Iterable<Datapoint> {
 			int y = ((Double)params.get(1)).intValue() - 1;
 			
 			Datapoint dp = new Datapoint(idGenerator++, dpTO);
-			fv.updateMinMax(dp); //update min and max for the feature
+			fv.updateMinMax(dp); //update min and max for the feature to allow the scaling operation
 			datapoints[x][y] = dp;
 		}
 		
@@ -117,6 +117,14 @@ public abstract class Data implements Iterable<Datapoint> {
 				if(x == width){
 					x = 0;
 					y++;
+				}
+				
+				//Skip null cell
+				while(y < height && datapoints[y][x] == null){
+					if(++x == width){
+						x = 0;
+						y++;
+					}
 				}
 				
 				if(y == height)

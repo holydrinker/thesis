@@ -8,11 +8,11 @@ import io.FeatureVectorTO;
 public class AutoDataset extends Data {
 	/*
 	 * La classe è stata completamente riscritta dopo il ricevimento del 31 luglio.
-	 * Non vengono più generati nuovi transfer object come avevo fatto io, pensi viene creata una matrice nuova, 
+	 * Non vengono più generati nuovi transfer object come avevo fatto io, bensì viene creata una matrice nuova, 
 	 * delle stesse dimensioni del dataset, vuota. Viene popolata generando nuovi datapoint con l'autocorrelazione.
 	 * 
 	 * Cosa aggiunte:
-	 * - Costruttore nella classe data, perchè qui ho bisogno di generare un Dataset passando soloil feature vector.
+	 * - Costruttore nella classe data, perchè qui ho bisogno di generare un Dataset passando solo il feature vector.
 	 */
 	
 	public AutoDataset(FeatureVectorTO fvTO, DataTO stream, AutocorrelationI ac, short radius) {
@@ -21,16 +21,17 @@ public class AutoDataset extends Data {
 		final int MAX_Y = this.getHeight();
 		
 		//Creo e popolo una nuova matrice che rimpiazzerà il dataset appena costruita.
-		Datapoint[][] acValues = new Datapoint[MAX_X][MAX_Y];
+		Datapoint[][] acDatapoints = new Datapoint[MAX_X][MAX_Y];
 		for(int x = 0; x < MAX_X; x++){
 			for(int y = 0; y < MAX_Y; y++){
-				Datapoint acDatapoint = ac.compute(this, (short)x, (short)y, (short)radius);
-				acValues[x][y] = acDatapoint;
+				//Iterator return only not null cells
+				Datapoint acDatapoint = ac.compute(this, (short)x, (short)y, (short)radius);;				
+				acDatapoints[x][y] = acDatapoint;
 			}
 		}
 		
-		//Sostituisco la matrice con i valori spettrali con la matrice appena popolata con le autocorrelazioni
-		this.datapoints = acValues;
+		//Switch old matrix with autocorrlated values' matrix
+		this.datapoints = acDatapoints;
 		
 		//Scalo i valori della matrice, che ora sono i valori di autocorrelazione
 		//super.scaling();

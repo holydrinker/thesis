@@ -2,8 +2,11 @@
 public class Temp {
 
 	public static void main(String[] args) {
-		int[][] matrix = new int[2][4];
+		class Inner{}
+		
+		Inner[][] matrix = new Inner[2][4];
 
+		/*
 		matrix[0][0] = 1;
 		matrix[0][1] = 2;
 		matrix[0][2] = 3;
@@ -12,8 +15,14 @@ public class Temp {
 		matrix[1][1] = 6;
 		matrix[1][2] = 7;
 		matrix[1][2] = 8;
+		*/
 		
-		System.out.println(matrix[0][1]);
+		//System.out.println(matrix[0][0] + " " + matrix[0][1] + " " + matrix[0][2]);
+		
+		for(Inner obj : matrix[0]){
+			System.out.println(obj);
+		}
+		
 		
 	}
 

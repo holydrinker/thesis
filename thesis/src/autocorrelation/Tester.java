@@ -12,21 +12,24 @@ public class Tester {
 		StreamGenerator sg = new StreamGenerator("D:/dataset/inputFile.txt");
 		Dataset data = new Dataset(sg.getFeatureVectorTO(), sg.getDataTO());
 		
+		short radius = 1;
+		byte q = 3;
+		
 		//Autocorrelazione da testare
-		GetisOrd go = new GetisOrd(new InverseWeight((short)2, (byte)3));
+		GetisOrd go = new GetisOrd(new InverseWeight(radius, q));
 		
 		//Datapoint da autocorrelare
 		short x = 0;
 		short y = 0;
-		short radius = 1;
 		Datapoint dp = go.compute(data, x, y, radius);
 		
-		//Printing test
+		//Print
+		System.out.println("autocorrelation.Tester");
 		int i = 0;
 		for(Object value : dp)
 			if(i++ == 1)
 				System.out.print(value + " ");
-		
+	
 	}
 
 }

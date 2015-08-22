@@ -32,8 +32,12 @@ public class GetisOrdSingleFeature {
 		
 		for(Object neighbour : neighborhood){
 			Record r = (Record) neighbour;
-			double zj = (r.dp).getValue(featureIdx);
-			double lij = weight.compute(x, y, r.x, r.y);
+			short dpX = r.x;
+			short dpY = r.y;
+			Datapoint dp = (r.dp);
+			
+			double zj = dp.getValue(featureIdx);
+			double lij = weight.compute(x, y, dpX, dpY);
 			
 			num += (lij * zj) - (z * L);
 			sumDen += (Math.pow(lij, 2) - Math.pow(L, 2));
