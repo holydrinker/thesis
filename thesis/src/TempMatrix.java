@@ -4,7 +4,6 @@ import data.Datapoint;
 
 public class TempMatrix implements Iterable {
 
-	//non aggiunta a github
 	private class Record{
 		int value;
 		
