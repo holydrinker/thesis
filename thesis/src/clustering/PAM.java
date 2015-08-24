@@ -10,7 +10,7 @@ import distance.DistanceI;
 public class PAM extends Clustering {
 	private short k;
 	//Matrice delle distanze che deve essere utilizzata che probabilmente dovranno utilizzare sia il builder sia lo swapper, quindi settato a visibilità di package
-	DistanceMatrix distanceMatrix;
+	private DistanceMatrix distanceMatrix;
 	
 	public PAM(short k, Data data) {
 		super(data);
@@ -25,14 +25,14 @@ public class PAM extends Clustering {
 	
 	private Set<Datapoint> generateMedoids(){
 		Set<Datapoint> medoids = new HashSet<Datapoint>();
-		medoids = new Builder(this.k, super.data).compute();
-		medoids = new Swapper(medoids, super.data).compute();
+		medoids = new Builder(this.k, super.data, this.distanceMatrix).compute();
+		medoids = new Swapper(medoids, super.data, this.distanceMatrix).compute();
 		
 		return medoids;
 	}
 	
 	private void populateClusters(Set<Datapoint> medoids){
-		//Creare un nuovo cluster
+		//Creare un nuovo cluster per ogni medoide
 		//popolarlo
 		//aggiungerlo a super.clusterSet
 	}

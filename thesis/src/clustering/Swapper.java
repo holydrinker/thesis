@@ -8,9 +8,10 @@ import data.Datapoint;
 
 public class Swapper {
 	private Set<Datapoint> medoids = new HashSet<Datapoint>();
+	private DistanceMatrix distanceMatrix;
 	
-	public Swapper(Set<Datapoint> medoids, Data data) {
-		// TODO Auto-generated constructor stub
+	public Swapper(Set<Datapoint> medoids, Data data, DistanceMatrix distanceMatrix) {
+		this.distanceMatrix = distanceMatrix;
 	}
 	
 	Set<Datapoint> compute(){
