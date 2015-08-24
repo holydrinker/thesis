@@ -44,6 +44,12 @@ public class Datapoint implements Iterable<Double> {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		Datapoint dp = (Datapoint) obj;
+		return this.pointID == dp.pointID;
+	}
+	
+	@Override
 	public Iterator<Double> iterator() {
 		return values.iterator();
 	}

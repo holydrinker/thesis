@@ -9,11 +9,12 @@ import distance.DistanceI;
 
 public class PAM extends Clustering {
 	private short k;
-	private DistanceI d;
-	//Qui serve una matrice delle distanze che deve essere utilizzata che probabilmente dovranno utilizzare sia il builder sia lo swapper
+	//Matrice delle distanze che deve essere utilizzata che probabilmente dovranno utilizzare sia il builder sia lo swapper, quindi settato a visibilità di package
+	DistanceMatrix distanceMatrix;
 	
-	public PAM(short k, DistanceI d, Data data) {
+	public PAM(short k, Data data) {
 		super(data);
+		this.distanceMatrix = new DistanceMatrix(data);
 	}
 
 	@Override

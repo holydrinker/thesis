@@ -7,7 +7,7 @@ import data.Data;
 import data.Datapoint;
 
 public class Builder {
-	private HashSet<Datapoint> medoids = new HashSet<Datapoint>();
+	private Set<Datapoint> medoids = new HashSet<Datapoint>();
 	
 	public Builder(short k, Data data) {
 		for(int i = 0; i < k; i++){
