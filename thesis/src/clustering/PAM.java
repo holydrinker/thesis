@@ -14,19 +14,20 @@ public class PAM extends Clustering {
 	
 	public PAM(short k, Data data) {
 		super(data);
+		this.k = k;
 		this.distanceMatrix = new DistanceMatrix(data);
 	}
 
 	@Override
 	public void generateClusters() {
 		Set<Datapoint> medoids = generateMedoids();
-		populateClusters(medoids);
+		//populateClusters(medoids);
 	}
 	
 	private Set<Datapoint> generateMedoids(){
 		Set<Datapoint> medoids = new HashSet<Datapoint>();
 		medoids = new Builder(this.k, super.data, this.distanceMatrix).compute();
-		medoids = new Swapper(medoids, super.data, this.distanceMatrix).compute();
+		//medoids = new Swapper(medoids, super.data, this.distanceMatrix).compute();
 		
 		return medoids;
 	}

@@ -1,7 +1,7 @@
 package clustering;
 
-//import java.util.LinkedList;
-//import java.util.List;
+import java.util.LinkedList;
+import java.util.List;
 
 import data.Data;
 import data.Datapoint;
@@ -23,21 +23,21 @@ public class DistanceMatrix {
 			
 			for(Object obj2 : data){
 				Datapoint dp2 = (Datapoint) obj2;
-				int x = dp1.getID()-1; //perchè gli indici partono da 1
-				int y = dp2.getID()-1;
+				int x = dp1.getID();
+				int y = dp2.getID();
 				matrix[x][y] = new EuclideanDissimilarity(dp1, dp2).compute();
 			}
 		}
 	}
 	
 	double getDistance(Datapoint dp1, Datapoint dp2){
-		int x = dp1.getID() - 1;
-		int y = dp2.getID() - 1;
+		int x = dp1.getID();
+		int y = dp2.getID();
 		
 		return this.matrix[x][y];
 	}
 	
-	/*--------DA USARE SOLO PER I TEST ----------
+	/*--------DA USARE SOLO PER I TEST ----------*/
 	public DistanceMatrix(List<Datapoint> points) {
 		int n = points.size();
 		this.matrix = new double[n][n];
@@ -46,19 +46,19 @@ public class DistanceMatrix {
 			Datapoint dp1 = points.get(i);
 			for(int j = 0; j < n; j++){
 				Datapoint dp2 = points.get(j); 
-				int x = dp1.getID() - 1;
-				int y = dp2.getID() - 1;
+				int x = dp1.getID();
+				int y = dp2.getID();
 				matrix[x][y] = new EuclideanDissimilarity(dp1, dp2).compute();
 			}
 		}
 	}
-	*/
 	
-	/*Test
+	
+	//Test
 	public static void main(String[] args) {
-		Datapoint p1 = new Datapoint(1, 2, 3, 4);
-		Datapoint p2 = new Datapoint(2, 1, 1, 1);
-		Datapoint p3 = new Datapoint(3, 4, 6, 7);
+		Datapoint p1 = new Datapoint(0, 2, 3, 4);
+		Datapoint p2 = new Datapoint(1, 1, 1, 1);
+		Datapoint p3 = new Datapoint(2, 4, 6, 7);
 		
 		LinkedList<Datapoint> list = new LinkedList<Datapoint>();
 		list.add(p1);
@@ -69,6 +69,6 @@ public class DistanceMatrix {
 		double dissimilarity = matrix.getDistance(p1, p2);
 		System.out.println("dissimilarity: " + dissimilarity);
 	}
-	*/
+	
 	
 }

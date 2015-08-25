@@ -18,14 +18,14 @@ public class Datapoint implements Iterable<Double> {
 			values.add((Double)params.get(i));
 	}
 	
-	/*----------DA USARE SOLO PER DEI TEST--------------
+	/*----------DA USARE SOLO PER DEI TEST--------------*/
 	public Datapoint(int pointID, double v1, double v2, double v3) {
 		this.pointID = pointID;
 		values.add(v1);
 		values.add(v2);
 		values.add(v3);
 	}
-	*/
+	
 	
 	public int getID(){
 		return this.pointID;

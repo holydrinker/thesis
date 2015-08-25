@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 import autocorrelation.AcFactory;
 import autocorrelation.AutocorrelationI;
+import clustering.Clustering;
+import clustering.PAM;
 import data.Data;
 import data.Datapoint;
 import data.DataFactory;
@@ -57,7 +59,7 @@ public class Runner {
 		//User customized dataset creation
 		Data data = (Data)new DataFactory().getInstance(datasetType, paramsData); 
 		
-		//PRINTING TEST...
+		/*PRINTING TEST...
 		FeatureVector fv = data.getFeatureVector();
 		for(Object obj : fv){
 			Feature f = (Feature)obj;
@@ -71,6 +73,11 @@ public class Runner {
 				System.out.print(value.toString() + " ");
 			System.out.println("");
 		}
+		*/
+		
+		//CLUSTERING
+		Clustering PAM = new PAM((short)2, data);
+		PAM.generateClusters();
 	}
 
 }

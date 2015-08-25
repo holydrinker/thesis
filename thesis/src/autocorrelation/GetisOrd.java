@@ -23,7 +23,7 @@ public class GetisOrd implements AutocorrelationI {
 		//Compute datapoint's neighborhood
 		HashSet<Record> neighborhood = computeNeighborhood(data, x, y, radius);
 		
-		//Neighborhood testing...
+		/*Neighborhood testing...
 		System.out.println("|------------NEIGHBORHOOD--------------|");
 		for(Record r : neighborhood){
 			for(Object value : r.dp)
@@ -31,6 +31,7 @@ public class GetisOrd implements AutocorrelationI {
 			System.out.println("");
 		}
 		System.out.println("|--------------------------------------|");
+		*/
 		
 		//Compute a new autocorrelated valued for each continue feature
 		int i = 0; //use this to iterate over datapoint's values, skipping discrete features
