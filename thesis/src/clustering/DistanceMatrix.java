@@ -2,8 +2,7 @@ package clustering;
 
 import data.Data;
 import data.Datapoint;
-import distance.Dissimilarity;
-import distance.DistanceI;
+import distance.EuclideanDissimilarity;
 
 public class DistanceMatrix {
 	private double[][] matrix;
@@ -23,7 +22,7 @@ public class DistanceMatrix {
 				Datapoint dp2 = (Datapoint) obj2;
 				int x = dp1.getID();
 				int y = dp2.getID();
-				matrix[x][y] = new Dissimilarity(dp1, dp2).compute();
+				matrix[x][y] = new EuclideanDissimilarity(dp1, dp2).compute();
 			}
 		}
 	}

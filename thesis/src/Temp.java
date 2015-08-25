@@ -1,29 +1,16 @@
+import data.Datapoint;
+import distance.EuclideanDissimilarity;
 
 public class Temp {
 
 	public static void main(String[] args) {
-		class Inner{}
+		Datapoint dp1 = new Datapoint(1, 3, 4, 5);
+		Datapoint dp2 = new Datapoint(2, 3, 4, 5);
 		
-		Inner[][] matrix = new Inner[2][4];
-
-		/*
-		matrix[0][0] = 1;
-		matrix[0][1] = 2;
-		matrix[0][2] = 3;
-		matrix[0][3] = 4;
-		matrix[1][0] = 5;
-		matrix[1][1] = 6;
-		matrix[1][2] = 7;
-		matrix[1][2] = 8;
-		*/
+		EuclideanDissimilarity dissimilarity = new EuclideanDissimilarity(dp1, dp2);
+		double result = dissimilarity.compute();
 		
-		//System.out.println(matrix[0][0] + " " + matrix[0][1] + " " + matrix[0][2]);
-		
-		for(Inner obj : matrix[0]){
-			System.out.println(obj);
-		}
-		
-		
+		System.out.println("dissimilarity: " + result);
 	}
 
 }
