@@ -76,7 +76,7 @@ public class Runner {
 		*/
 		
 		//CLUSTERING
-		Clustering PAM = new PAM((short)2, data);
+		Clustering PAM = new PAM((short)4, data);
 		PAM.generateClusters();
 	}
 

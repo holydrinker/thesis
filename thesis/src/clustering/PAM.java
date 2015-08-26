@@ -27,7 +27,12 @@ public class PAM extends Clustering {
 	private Set<Datapoint> generateMedoids(){
 		Set<Datapoint> medoids = new HashSet<Datapoint>();
 		medoids = new Builder(this.k, super.data, this.distanceMatrix).compute();
-		//medoids = new Swapper(medoids, super.data, this.distanceMatrix).compute();
+		//test
+		System.out.println("BUILT MEDOIDS");
+		for(Datapoint dp : medoids){
+			System.out.println(dp.getID());
+		}
+		medoids = new Swapper(medoids, super.data, this.distanceMatrix).compute();
 		
 		return medoids;
 	}

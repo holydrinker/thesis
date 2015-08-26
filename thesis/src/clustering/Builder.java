@@ -47,7 +47,6 @@ public class Builder {
 		double distanceMin = Double.MAX_VALUE;
 
 		for (Entry<Datapoint, Double> pair : logBook.entrySet()) {
-			Datapoint datapoint = pair.getKey();
 			double distanceSum = pair.getValue();
 
 			if (distanceSum < distanceMin) {
