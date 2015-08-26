@@ -1,11 +1,15 @@
 package clustering;
 
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 public class ClusterSet implements Iterable<Cluster> {
-	private HashSet<Cluster> clusters = new HashSet<Cluster>();
+	private Set<Cluster> clusters;
 	
+	public ClusterSet(Set<Cluster> clusters) {
+		this.clusters = clusters;
+	}
+
 	void exportCsv(){
 		//todo
 	}
