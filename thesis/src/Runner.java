@@ -13,31 +13,26 @@ import io.DataTO;
 import io.FeatureVectorTO;
 import io.StreamGenerator;
 
-/*To-do list
- * - controllare che non ci siano celle nulle
- * - controllare che le autocorrelazioni con il vicinato abbiano senso
- */
-
-
 public class Runner {
 	//TESTARE SE I VALORI DI AUTOCORRELAZIONE HANNO SENSO
 	
 	public static void main(String[] args) {
 		//Console args
-		String fileName = "D:/dataset/inputFile.txt"; //Il path e il nome del file saranno dei parametri
-		String datasetType = "auto"; //DATASET or AUTO lower case
+		String fileName = "D:/dataset/indianpine.arff"; //Il path e il nome del file saranno dei parametri
+		String datasetType = "dataset"; //DATASET or AUTO lower case
 		String autocorrelationType = null;
 		String radius = null;
 		String q = null;
+		String centroidsNumber = "36"; //numero di centroidi
 		
-		//If you choose autocorrelation 
+		//If you choose autocorrelation... 
 		AutocorrelationI ac = null;
 		if(datasetType.equalsIgnoreCase("auto")){
 			autocorrelationType = "GO"; //GO to use GetisOrd
 			radius = "3";
 			q = "3";
 			
-			//Wrapping args to call factory for Autocorrelation
+			//...wrap args to call factory for Autocorrelation
 			ArrayList<Object> paramsAc = new ArrayList<Object>();
 			paramsAc.add((short)Integer.parseInt(radius));
 			paramsAc.add((byte)Integer.parseInt(q));
@@ -67,16 +62,20 @@ public class Runner {
 		}
 		System.out.println("");
 		
+		int count = 0;
 		for(Object obj : data){
 			Datapoint dp = (Datapoint)obj;
 			for(Object value : dp)
 				System.out.print(value.toString() + " ");
 			System.out.println("");
+			count++;
 		}
+		System.out.println("Dataset size: " + count);
 		*/
 		
 		//CLUSTERING
-		Clustering PAM = new PAM((short)4, data);
+		short k = (short)(Integer.parseInt(centroidsNumber));
+		Clustering PAM = new PAM(k, data);
 		PAM.generateClusters();
 	}
 
