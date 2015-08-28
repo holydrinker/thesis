@@ -17,7 +17,7 @@ public class Swapper {
 	private Map<Datapoint,DistancePair> distanceMap;
 	private Map<SwapPair, Double> swapMap;
 	
-	//TEST
+	//TEST VARIABLES
 	private int positivi = 0;
 	private int negativi = 0;
 	private int zeri = 0;
@@ -26,17 +26,16 @@ public class Swapper {
 		this.distanceMatrix = distanceMatrix;
 		this.medoids = medoids;
 		
-		boolean loop = true;
+		boolean loop = true; 
 		int loopCount = 0;
 		PrintWriter writer = null;
 		try {
-			writer = new PrintWriter("D:/output.txt", "UTF-8");
+			writer = new PrintWriter("D:/swap log.txt", "UTF-8"); //qui salvo il log delle operazioni si swapping
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		} 
 		
 		while(loop){
-			System.out.println(loopCount);
 			this.negativi = 0;
 			this.positivi = 0;
 			this.zeri = 0;
@@ -44,29 +43,9 @@ public class Swapper {
 			//Tracks the first and the second closer selected object from all unselected object
 			initDistanceMap(data);
 			
-			/*System.out.println("DISTACE MAP");
-			System.out.println("datapointID - D - E");
-			for(Entry<Datapoint, DistancePair> entry : this.distanceMap.entrySet()){
-				Datapoint dp = entry.getKey();
-				DistancePair pair = entry.getValue();
-				double D = pair.first;
-				double E = pair.second;
-				System.out.println(dp.getID() + " - " + D + " - " + E);
-			}
-			System.out.println("-------------------");*/
-			
 			//Compute T_ih for each pair S x U and save every result into swapMap
 			initSwapMap(data);
-			
-			/*System.out.println("SWAP MAP");
-			System.out.println("pair - T");
-			for(Entry<SwapPair, Double> entry : this.swapMap.entrySet()){
-				SwapPair pair = entry.getKey();
-				double t = entry.getValue();
-				System.out.println(pair.medoid.getID() + " - " + pair.point.getID() + " - " + t);
-			}
-			System.out.println("-------------------");*/
-			
+				
 			//Swapping
 			Entry<SwapPair,Double> pair = choosePair();
 			SwapPair swapPair = pair.getKey();

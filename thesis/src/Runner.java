@@ -18,7 +18,7 @@ public class Runner {
 	
 	public static void main(String[] args) {
 		//Console args
-		String fileName = "D:/dataset/indianpine.arff"; //Il path e il nome del file saranno dei parametri
+		String fileName = "D:/dataset/inputFile.txt"; //Il path e il nome del file saranno dei parametri
 		String datasetType = "dataset"; //DATASET or AUTO lower case
 		String autocorrelationType = null;
 		String radius = null;
