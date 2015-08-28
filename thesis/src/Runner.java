@@ -23,7 +23,10 @@ public class Runner {
 		String autocorrelationType = null;
 		String radius = null;
 		String q = null;
-		String centroidsNumber = "36"; //numero di centroidi
+		String centroidsNumber = "4"; //numero di centroidi
+		
+		System.out.println("START\n");
+		System.out.print("loading data...");
 		
 		//If you choose autocorrelation... 
 		AutocorrelationI ac = null;
@@ -70,13 +73,18 @@ public class Runner {
 			System.out.println("");
 			count++;
 		}
-		System.out.println("Dataset size: " + count);
-		*/
+		System.out.println("Dataset size: " + count);*/
+		
+		System.out.println("done\n");
 		
 		//CLUSTERING
 		short k = (short)(Integer.parseInt(centroidsNumber));
 		Clustering PAM = new PAM(k, data);
 		PAM.generateClusters();
+		System.out.println("END");
+		
+		//Export clusters in csv
+		PAM.exportCsv();
 	}
 
 }

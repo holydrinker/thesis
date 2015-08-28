@@ -39,17 +39,32 @@ public class PAM extends Clustering {
 	@Override
 	public void generateClusters() {
 		Set<Datapoint> medoids = generateMedoids();
+		System.out.print("clustering...");
 		populateClusters(medoids);
+		System.out.println("done.\n");
+		
+		/* Print cluster test
+		for(Cluster cluster : super.clusterSet){
+			System.out.println("cluster id: " + cluster.getID());
+			for(Datapoint dp : cluster){
+				System.out.println(dp.getID());
+			}
+		}*/
 	}
 	
 	private Set<Datapoint> generateMedoids(){
 		Set<Datapoint> medoids = new HashSet<Datapoint>();
+		System.out.print("building...");
 		medoids = new Builder(this.k, super.data, this.distanceMatrix).compute();
+		System.out.println("done \n");
+		System.out.println("swapping...");
 		medoids = new Swapper(medoids, super.data, this.distanceMatrix).compute();
+		System.out.println("done\n");
 		return medoids;
 	}
 	
 	private void populateClusters(Set<Datapoint> medoids){
+		
 		Map<Datapoint, LinkedList<Datapoint>> clusterList = new HashMap<Datapoint, LinkedList<Datapoint>>();
 		for(Datapoint medoid : medoids){
 			clusterList.put(medoid, new LinkedList<Datapoint>());

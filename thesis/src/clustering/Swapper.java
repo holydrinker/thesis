@@ -28,12 +28,6 @@ public class Swapper {
 		
 		boolean loop = true; 
 		int loopCount = 0;
-		PrintWriter writer = null;
-		try {
-			writer = new PrintWriter("D:/swap log.txt", "UTF-8"); //qui salvo il log delle operazioni si swapping
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		} 
 		
 		while(loop){
 			this.negativi = 0;
@@ -58,14 +52,9 @@ public class Swapper {
 				loop = false;
 			}
 			
-			try {
-				writer.println("loopCount: " + (loopCount++) + " positivi: " + this.positivi + " negativi: " + this.negativi + " zeri: " + this.zeri);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			System.out.println("loopCount: " + (loopCount++) + " positivi: " + this.positivi + " negativi: " + this.negativi + " zeri: " + this.zeri);
 		}
 		
-		writer.close();
 	}
 	
 	/*

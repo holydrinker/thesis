@@ -1,19 +1,19 @@
 package clustering;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
-import data.Data;
 import data.Datapoint;
 
 public class Cluster implements Iterable<Datapoint>{
 	private short id;
 	private Datapoint medoid;
-	private LinkedList<Datapoint> datapoints = new LinkedList<Datapoint>(); //Assicurarsi che la linkedlist sia la scelta più giusta
+	private List<Datapoint> datapoints;
 	
-	public Cluster(short s, Datapoint medoid2, List<Datapoint> list) {
-		// TODO Auto-generated constructor stub
+	public Cluster(short id, Datapoint medoid, List<Datapoint> datapoints) {
+		this.id = id;
+		this.medoid = medoid;
+		this.datapoints = datapoints;
 	}
 
 	public Datapoint getMedoid(){
@@ -27,6 +27,12 @@ public class Cluster implements Iterable<Datapoint>{
 	@Override
 	public Iterator<Datapoint> iterator() {
 		return this.datapoints.iterator();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		Cluster otherCluster = (Cluster) obj;
+		return this.id == otherCluster.id;
 	}
 
 }
