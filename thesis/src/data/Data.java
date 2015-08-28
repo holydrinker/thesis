@@ -54,7 +54,7 @@ public abstract class Data implements Iterable<Datapoint> {
 		return this.fv;
 	}
 	
-	public Datapoint getDatapoint(int col, int row){
+	public Datapoint getDatapoint(short row, short col){
 		return this.datapoints[row][col];
 	}
 	
