@@ -4,11 +4,9 @@ import autocorrelation.AcFactory;
 import autocorrelation.AutocorrelationI;
 import clustering.Clustering;
 import clustering.PAM;
+
 import data.Data;
-import data.Datapoint;
 import data.DataFactory;
-import data.Feature;
-import data.FeatureVector;
 import io.DataTO;
 import io.FeatureVectorTO;
 import io.StreamGenerator;
@@ -17,6 +15,9 @@ public class Runner {
 	//TESTARE SE I VALORI DI AUTOCORRELAZIONE HANNO SENSO
 	
 	public static void main(String[] args) {
+		//Start timer
+		double startTime = System.currentTimeMillis(); 
+		
 		//Console args
 		String fileName = "D:/dataset/inputFile.txt"; //Il path e il nome del file saranno dei parametri
 		String datasetType = "dataset"; //DATASET or AUTO lower case
@@ -74,17 +75,28 @@ public class Runner {
 			count++;
 		}
 		System.out.println("Dataset size: " + count);*/
-		
+			
 		System.out.println("done\n");
 		
 		//CLUSTERING
 		short k = (short)(Integer.parseInt(centroidsNumber));
 		Clustering PAM = new PAM(k, data);
 		PAM.generateClusters();
-		System.out.println("END");
+		System.out.println("Everything done:");
 		
 		//Export clusters in csv
 		PAM.exportCsv();
+		
+		//end timer
+		double endTime = System.currentTimeMillis(); 
+		double time = endTime - startTime;
+		System.out.println("millisecondi = " + time);
+		double secondi = time / 1000;
+		System.out.println("secondi = " + secondi);
+		double minuti = secondi / 60;
+		System.out.println("minuti = " + minuti);
+		double ore = minuti / 60;
+		System.out.println("ore = " + ore);
 	}
 
 }

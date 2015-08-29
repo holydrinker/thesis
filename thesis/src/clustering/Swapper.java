@@ -1,7 +1,5 @@
 package clustering;
 
-import java.io.PrintWriter;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,8 +12,8 @@ import data.Datapoint;
 public class Swapper {
 	private Set<Datapoint> medoids = new HashSet<Datapoint>();
 	private DistanceMatrix distanceMatrix;
-	private Map<Datapoint,DistancePair> distanceMap;
-	private Map<SwapPair, Double> swapMap;
+	private Map<Datapoint,DistancePair> distanceMap = new HashMap<Datapoint, DistancePair>();;
+	private Map<SwapPair, Double> swapMap = new HashMap<SwapPair, Double>();;
 	
 	//TEST VARIABLES
 	private int positivi = 0;
@@ -85,7 +83,7 @@ public class Swapper {
 	 * Tracks the distance between the first and the second closest selected object for every unselected object
 	 */
 	private void initDistanceMap(Data data){
-		this.distanceMap = new HashMap<Datapoint, DistancePair>();
+		this.distanceMap.clear();
 		
 		for(Datapoint point : data){
 			double first = Double.MAX_VALUE;
@@ -100,11 +98,11 @@ public class Swapper {
 					} else if(distance < second){
 						second = distance;
 					}
-					
-					DistancePair pair = new DistancePair(first, second);
-					this.distanceMap.put(point, pair);
 				}
 			}
+			
+			DistancePair pair = new DistancePair(first, second);
+			this.distanceMap.put(point, pair);
 		}
 	}
 	
@@ -112,7 +110,7 @@ public class Swapper {
 	 * Compute T_ih factor for all pairs in S x U
 	 */
 	private void initSwapMap(Data data){
-		this.swapMap = new HashMap<SwapPair, Double>();
+		this.swapMap.clear();
 		
 		for(Datapoint medoid : this.medoids){
 			for(Datapoint swapPoint : data){
@@ -121,6 +119,7 @@ public class Swapper {
 					SwapPair pair = new SwapPair(medoid, swapPoint);
 					this.swapMap.put(pair, Tih);
 					
+					//report update
 					if(Tih < 0){
 						this.negativi++;
 					} else if(Tih > 0){

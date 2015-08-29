@@ -5,9 +5,9 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Set;
 
+import data.Data;
 import data.Datapoint;
 import data.Feature;
-import data.FeatureVector;
 
 public class ClusterSet implements Iterable<Cluster> {
 	private Set<Cluster> clusters;
@@ -16,13 +16,13 @@ public class ClusterSet implements Iterable<Cluster> {
 		this.clusters = clusters;
 	}
 
-	void exportCsv(FeatureVector fv){
+	void exportCsv(Data data){
 		try {
-			PrintWriter pw = new PrintWriter("D:/clusters.csv");
-			String nextLine = "clusterID;datapointID;";
+			PrintWriter pw = new PrintWriter("D:/clusteringOutput.csv");
+			String nextLine = "clusterID;pixelID;coord_X;coord_Y;";
 			
 			//Write feature vector
-			for(Feature feature : fv){
+			for(Feature feature : data.getFeatureVector()){
 				nextLine += (feature.getName() + ";");
 			}
 			nextLine = nextLine.substring(0, nextLine.length() - 1);
@@ -33,7 +33,10 @@ public class ClusterSet implements Iterable<Cluster> {
 				short clusterID = cluster.getID();
 				
 				for(Datapoint dp : cluster){
-					nextLine = clusterID + ";" + dp.getID() + ";";
+					short id = dp.getID();
+					short x = data.getCoord(id).x;
+					short y = data.getCoord(id).y;
+					nextLine = clusterID + ";" + id + ";" + x + ";" + y + ";"; //+1 alle coordinate perchè i pixel partivano da 1 ma nella mia matrice partivano da 0
 					for(Object value : dp){
 						nextLine += value + ";";
 					}

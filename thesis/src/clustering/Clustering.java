@@ -16,6 +16,6 @@ public abstract class Clustering {
 	public abstract void generateClusters();
 	
 	public void exportCsv(){
-		this.clusterSet.exportCsv(data.getFeatureVector());
+		this.clusterSet.exportCsv(data);
 	}
 }

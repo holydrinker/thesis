@@ -15,37 +15,41 @@ public abstract class Data implements Iterable<Datapoint> {
 	public Data(FeatureVectorTO fvTO, DataTO stream) {
 		fv = new FeatureVector(fvTO);
 		
+		//IMPORTANTE: le x sono le righe e le y sono le colonne. quindi il numero di righe è l'altezza e il numero di colonne la lunghezza
+		
 		//BUILD MATRIX
 		int width = -1;
 		int height = -1;
 		
 		for(Object obj : stream.get()){
-			DatapointTO dpTO = (DatapointTO) obj; //In pos 0 and in pos 1 DatapointTO contains the coordinates
+			DatapointTO dpTO = (DatapointTO) obj; 
 			LinkedList<Object> params = dpTO.get();
 			
-			int x = ((Double)params.get(0)).intValue() - 1;
-			int y = ((Double)params.get(1)).intValue() - 1;
+			//In pos 0 and in pos 1 DatapointTO contains the coordinates
+			int row = ((Double)params.get(0)).intValue() - 1;
+			int col = ((Double)params.get(1)).intValue() - 1;
 			
-			if(x > width)
-				width = x;
-			if(y > height)
-				height = y;			
+			//update width e height
+			if(col > width)
+				width = col;
+			if(row > height)
+				height = row;			
 		}
-		datapoints = new Datapoint[width+1][height+1];
+		datapoints = new Datapoint[height+1][width+1];
 		
 		//POPULATE MATRIX
-		int idGenerator = 0;
-		
 		for(Object obj : stream.get()){
 			DatapointTO dpTO = (DatapointTO) obj;
 			LinkedList<Object> params = dpTO.get();
 			
-			int x = ((Double)params.get(0)).intValue() - 1;
-			int y = ((Double)params.get(1)).intValue() - 1;
+			int row = ((Double)params.get(0)).intValue() - 1;
+			int col = ((Double)params.get(1)).intValue() - 1;
+			width = this.getWidth();
+			short id = (short) ((row * width) + col);
 			
-			Datapoint dp = new Datapoint(idGenerator++, dpTO);
+			Datapoint dp = new Datapoint(id, dpTO);
 			fv.updateMinMax(dp); //update min and max for the feature to allow the scaling operation
-			datapoints[x][y] = dp;
+			datapoints[row][col] = dp;
 		}
 		
 	}
@@ -54,17 +58,31 @@ public abstract class Data implements Iterable<Datapoint> {
 		return this.fv;
 	}
 	
+	public short getWidth(){
+		return (short) this.datapoints[0].length;
+	}
+	
+	public short getHeight(){
+		return (short) this.datapoints.length;
+	}
+	
 	public Datapoint getDatapoint(short row, short col){
 		return this.datapoints[row][col];
 	}
 	
-	public int getWidth(){
-		return this.datapoints[0].length;
+	/**
+	 * Recovery of the datapoint's coordinates from his ID.
+	 * @param id
+	 * @return
+	 */
+	public Coord getCoord(short id){
+		int width = this.getWidth();
+		short row = (short) (id / width);
+		short col = (short) (id - (row * width));
+		return new Coord(row, col);
 	}
 	
-	public int getHeight(){
-		return this.datapoints.length;
-	}
+	
 	
 	/**
 	 * Una volta popolato il dataset, itera e per ogni valore di ogni datapoint fa il seguente controllo:
@@ -92,6 +110,16 @@ public abstract class Data implements Iterable<Datapoint> {
 			}
 		}
 	}
+	
+	/*Print id test
+	 public void printIdMatrix(){
+		 for(int row = 0; row < this.getHeight(); row++){
+			 for(int col = 0; col< this.getWidth(); col++){
+				System.out.print(this.datapoints[row][col].getID() + "   "); 
+			 }
+			 System.out.println("");
+		 }
+	 }*/
 	
 	/**
 	 * Controlla se value rientra nei valori ammessi dalla feature f
