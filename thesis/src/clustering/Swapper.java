@@ -69,7 +69,7 @@ public class Swapper {
 	 * questo scambio conveniente.
 	 * 
 	 * Per far ciò calcoleremo un valore T_ih. In base al valore assunto da tale variabile considereremo lo swap come conveniente o meno.
-	 * Per il calcolo di T_ih c'è bisogno di calcolare K_jih (un calcolo fatto su ogni j € a U - {j}. Per il calcolo di D_ij bisogna far in modo
+	 * Per il calcolo di T_ih c'è bisogno di calcolare K_jih (un calcolo fatto su ogni j € a U - {h} in relazione ad i. Per il calcolo di T_ij bisogna far in modo
 	 * di tenere traccia di Dj e Ej (distanza da medoide più vicino a secondo medoide più vicino).
 	 * 
 	 * Per ogni coppia (i,j) si ha che T_ih = SUM(K_jih | j € U).

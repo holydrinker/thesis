@@ -65,8 +65,8 @@ public class GetisOrd implements AutocorrelationI {
 		short endY = (short) (y + radius);
 				
 		//Prevent OutOfBoundsException
-		final short MAX_X = (short) (data.getWidth() - 1);
-		final short MAX_Y = (short) (data.getHeight() - 1);
+		final short MAX_X = (short) (data.getHeight() - 1);
+		final short MAX_Y = (short) (data.getWidth() - 1);
 				
 		if(startX < 0)
 			startX = 0;

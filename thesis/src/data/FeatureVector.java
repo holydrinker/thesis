@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class FeatureVector implements Iterable<Feature>{
-	private LinkedList<Feature> features = new LinkedList<Feature>();
+	public LinkedList<Feature> features = new LinkedList<Feature>();
 	
 	public FeatureVector(FeatureVectorTO to) {
 		for(Object obj : to.get())

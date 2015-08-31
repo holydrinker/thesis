@@ -19,12 +19,12 @@ public class Runner {
 		double startTime = System.currentTimeMillis(); 
 		
 		//Console args
-		String fileName = "D:/dataset/inputFile.txt"; //Il path e il nome del file saranno dei parametri
+		String fileName = "D:/dataset/indianPine.arff"; //Il path e il nome del file saranno dei parametri
 		String datasetType = "dataset"; //DATASET or AUTO lower case
 		String autocorrelationType = null;
 		String radius = null;
 		String q = null;
-		String centroidsNumber = "4"; //numero di centroidi
+		String centroidsNumber = "6"; //numero di centroidi
 		
 		System.out.println("START\n");
 		System.out.print("loading data...");

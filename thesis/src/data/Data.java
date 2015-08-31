@@ -98,14 +98,14 @@ public abstract class Data implements Iterable<Datapoint> {
 				Feature f = (Feature)obj;
 				Double value = dp.getValue(i);
 				
-				if(f instanceof DiscreteFeature){
-					if(!checkDiscreteValue((DiscreteFeature)f, value))
+				if (f instanceof DiscreteFeature) {
+					if (!checkDiscreteValue((DiscreteFeature) f, value))
 						throw new InvalidDiscreteFeature(value + " is not a  valid value for feature: " + f.name);
 				} else if (f instanceof ContinueFeature) {
-					double newValue = ((ContinueFeature)f).getScaled(value);
+					double newValue = ((ContinueFeature) f).getScaled(value);
 					dp.setValue(i, newValue);
 				}
-				
+
 				i++;
 			}
 		}
@@ -166,6 +166,16 @@ public abstract class Data implements Iterable<Datapoint> {
 				return datapoints[y][x++];
 			}
 		};
+	}
+	
+	//DA CANCELLARE QUANDO LE AUTOCORRELAZIONI SONO STATE TESTATE PER BENE
+	public void printAutocorrelationTest(int featureIdx){
+		for(int row = 0; row < this.getHeight(); row++){
+			for(int col = 0; col < this.getWidth(); col++){
+				System.out.print(this.datapoints[row][col].getValue(featureIdx) + "  ");
+			}
+			System.out.println("");
+		}
 	}
 
 }

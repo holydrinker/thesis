@@ -11,29 +11,34 @@ public class Tester {
 		System.out.println("autocorrelation.Tester");
 		
 		//Giusto un dataset per il testing del package
-		StreamGenerator sg = new StreamGenerator("D:/dataset/inputFile.txt");
+		StreamGenerator sg = new StreamGenerator("D:/dataset/ac.txt");
 		Dataset data = new Dataset(sg.getFeatureVectorTO(), sg.getDataTO());
 		
-		short radius = 1;
-		byte q = 3;
+		//Stampo il dataset facendo vedere solo la seconda feature, quella che mi interessa, cioè VALUE
+		int featureIdx = 1;
+		System.out.println("DATASET PRE-AUTOCORRELATION");
+		data.printAutocorrelationTest(featureIdx);
 		
-		//Autocorrelazione da testare
+		//Setting up autcorrelation
+		short radius = 2;
+		byte q = 3;
 		GetisOrd go = new GetisOrd(new InverseWeight(radius, q));
 		
-		//Datapoint da autocorrelare
+		//Test
 		short x = 0;
 		short y = 0;
-		System.out.println("Calcolo del vicinato del datapoint in posizione [" + x + "]["+y+"]");
-		System.out.println("radius: " + radius);
-		System.out.println("Test effettuato solo sui valori corrispondenti alla seconda feature");
-		Datapoint dp = go.compute(data, x, y, radius);
+		Datapoint dp1 = go.compute(data, x, y, radius);
+		System.out.println("I: " + dp1.getValue(featureIdx));
 		
-		//Print
-		int i = 0;
-		for(Object value : dp)
-			if(i++ == 1)
-				System.out.print(value + " ");
+		x = 5;
+		y = 0;
+		Datapoint dp2 = go.compute(data, x, y, radius);
+		System.out.println("II: " + dp2.getValue(featureIdx));
+		
+		x = 5;
+		y = 5;
+		Datapoint dp3 = go.compute(data, x, y, radius);
+		System.out.println("III: " + dp3.getValue(featureIdx));
 	
 	}
-
 }
