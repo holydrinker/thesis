@@ -17,16 +17,19 @@ public class AutoDataset extends Data {
 	
 	public AutoDataset(FeatureVectorTO fvTO, DataTO stream, AutocorrelationI ac, short radius) {
 		super(fvTO, stream);
-		final int MAX_X = this.getWidth();
-		final int MAX_Y = this.getHeight();
+		final int MAX_X = this.getHeight();
+		final int MAX_Y = this.getWidth();
 		
 		//Creo e popolo una nuova matrice che rimpiazzerà il dataset appena costruita.
 		Datapoint[][] acDatapoints = new Datapoint[MAX_X][MAX_Y];
 		for(int x = 0; x < MAX_X; x++){
 			for(int y = 0; y < MAX_Y; y++){
-				//Iterator return only not null cells
-				Datapoint acDatapoint = ac.compute(this, (short)x, (short)y, (short)radius);;				
-				acDatapoints[x][y] = acDatapoint;
+				//Iterator return only not null cells. Why I need this contorl? :\
+				Datapoint acDatapoint = this.getDatapoint((short)x, (short)y);
+				if(acDatapoint != null){
+					ac.compute(this, (short)x, (short)y, (short)radius);			
+					acDatapoints[x][y] = acDatapoint;
+				}
 			}
 		}
 		
@@ -34,7 +37,7 @@ public class AutoDataset extends Data {
 		this.datapoints = acDatapoints;
 		
 		//Scalo i valori della matrice, che ora sono i valori di autocorrelazione
-		//super.scaling();
+		super.scaling();
 	}
 	
 }
