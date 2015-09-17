@@ -7,15 +7,21 @@ import java.util.LinkedList;
 
 public class Datapoint implements Iterable<Double> {
 	private short pointID;
+	public short x;
+	public short y;
 	private LinkedList<Double> values = new LinkedList<Double>(); 
 	
 	Datapoint(short pointID, DatapointTO to){
 		this.pointID = pointID;
 		LinkedList<Object> params = to.get();
 		
-		//pos 0 = x; pos 1 = y
-		final int FIRST_VALUE = 2;
-		for(int i = FIRST_VALUE; i < params.size(); i++)
+		final int X_POS = 0;
+		final int Y_POS = 1;
+		final int FIRST_VALUE_POS = 2;
+		
+		this.x = (short) ((Double)params.get(X_POS)).intValue();
+		this.y = (short) ((Double)params.get(Y_POS)).intValue();
+		for(int i = FIRST_VALUE_POS; i < params.size(); i++)
 			values.add((Double)params.get(i));
 	}
 	

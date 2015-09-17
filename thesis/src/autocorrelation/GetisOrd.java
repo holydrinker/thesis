@@ -21,7 +21,7 @@ public class GetisOrd implements AutocorrelationI {
 		Datapoint dp = data.getDatapoint(x, y);
 		
 		//Compute datapoint's neighborhood
-		HashSet<Record> neighborhood = computeNeighborhood(data, x, y, radius);
+		HashSet<Datapoint> neighborhood = computeNeighborhood(data, x, y, radius);
 		
 		/*Neighborhood testing...
 		System.out.println("|------------NEIGHBORHOOD--------------|");
@@ -55,8 +55,8 @@ public class GetisOrd implements AutocorrelationI {
 	 * @param radius
 	 * @return
 	 */
-	private HashSet<Record> computeNeighborhood(Data data, short x, short y, short radius){
-		HashSet<Record> neighborhood = new HashSet<Record>();
+	private HashSet<Datapoint> computeNeighborhood(Data data, short x, short y, short radius){
+		HashSet<Datapoint> neighborhood = new HashSet<Datapoint>();
 		
 		//Set neighborhood's bounds 
 		short startX = (short) (x - radius);
@@ -83,7 +83,7 @@ public class GetisOrd implements AutocorrelationI {
 				if(!(loopY == y && loopX == x)){
 					//check if the neighbor if a null cell
 					if(!(data.getDatapoint(loopX, loopY) == null)){
-						neighborhood.add(new Record(loopX, loopY, data.getDatapoint(loopX, loopY)));
+						neighborhood.add(data.getDatapoint(loopX, loopY));
 					}
 				}
 			}
