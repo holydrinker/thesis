@@ -37,7 +37,7 @@ public class AutoDataset extends Data {
 		this.datapoints = acDatapoints;
 		
 		//Scalo i valori della matrice, che ora sono i valori di autocorrelazione
-		super.scaling();
+		//super.scaling();
 	}
 	
 }

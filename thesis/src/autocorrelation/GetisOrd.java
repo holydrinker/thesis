@@ -6,6 +6,7 @@ import data.ContinueFeature;
 import data.Data;
 import data.Datapoint;
 import data.Feature;
+import distance.EuclideanDistance;
 import distance.WeightI;
 
 public class GetisOrd implements AutocorrelationI {
@@ -17,31 +18,20 @@ public class GetisOrd implements AutocorrelationI {
 	
 	@Override
 	public Datapoint compute(Data data, short x, short y, short radius) {
-		//Get datapoint
 		Datapoint dp = data.getDatapoint(x, y);
-		
-		//Compute datapoint's neighborhood
 		HashSet<Datapoint> neighborhood = computeNeighborhood(data, x, y, radius);
 		
-		/*Neighborhood testing...
-		System.out.println("|------------NEIGHBORHOOD--------------|");
-		for(Record r : neighborhood){
-			for(Object value : r.dp)
-				System.out.print(value + " ");
-			System.out.println("");
-		}
-		System.out.println("|--------------------------------------|");
-		*/
+		int valueIdx = 0;
+		int featureIdx = 0;
 		
-		//Compute a new autocorrelated valued for each continue feature
-		int i = 0; //use this to iterate over datapoint's values, skipping discrete features
 		for(Object obj : data.getFeatureVector()){
 			Feature f = (Feature) obj;
 			if((Feature)f instanceof ContinueFeature){
-				double newFeatureValue = new GetisOrdSingleFeature(f, neighborhood, weight).compute(data, x, y);
-				dp.setValue(i, newFeatureValue);
+				double newFeatureValue = new GetisOrdSingleFeature_FUORI(featureIdx, neighborhood, weight).compute(data, x, y);
+				dp.setValue(valueIdx, newFeatureValue);
 			}
-			i++;
+			valueIdx++;
+			featureIdx++;
 		}
 	
 		return dp;
@@ -78,12 +68,18 @@ public class GetisOrd implements AutocorrelationI {
 			endY = MAX_Y;
 				
 		//Generate
+		//System.out.println("Neighborhood:");
 		for(short loopX = startX; loopX <= endX; loopX++){
 			for(short loopY = startY; loopY <= endY; loopY++){
 				if(!(loopY == y && loopX == x)){
-					//check if the neighbor if a null cell
-					if(!(data.getDatapoint(loopX, loopY) == null)){
-						neighborhood.add(data.getDatapoint(loopX, loopY));
+					
+					Datapoint neighbour = data.getDatapoint(loopX, loopY);
+					if(!(neighbour == null)){
+						double distance = new EuclideanDistance(x, y, loopX, loopY).compute();
+						if(distance <= radius){
+							//System.out.println("(" + loopX + "," + loopY + ")");
+							neighborhood.add(data.getDatapoint(loopX, loopY));
+						}
 					}
 				}
 			}

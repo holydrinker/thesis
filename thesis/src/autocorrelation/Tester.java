@@ -1,4 +1,4 @@
-                                                                                                                                        package autocorrelation;
+package autocorrelation;
 
 import data.Datapoint;
 import data.Dataset;
@@ -8,19 +8,22 @@ import io.StreamGenerator;
 public class Tester {
 
 	public static void main(String[] args) {
-		System.out.println("autocorrelation.Tester");
+		//PROVARE CON UN DATASET 2x3 E FARE I CONTI A MANO, VEDIAMO SE NE USCIAMO COSI
+		
+		System.out.println("autocorrelation.Tester\n");
 		
 		//Giusto un dataset per il testing del package
-		StreamGenerator sg = new StreamGenerator("D:/dataset/ac.txt");
+		StreamGenerator sg = new StreamGenerator("D:/dataset/ac-simili.txt");
 		Dataset data = new Dataset(sg.getFeatureVectorTO(), sg.getDataTO());
 		
 		//Stampo il dataset facendo vedere solo la seconda feature, quella che mi interessa, cioè VALUE
 		int featureIdx = 1;
 		System.out.println("DATASET PRE-AUTOCORRELATION");
 		data.printAutocorrelationTest(featureIdx);
+		System.out.println("");
 		
 		//Setting up autcorrelation
-		short radius = 2;
+		short radius = 5;
 		byte q = 3;
 		GetisOrd go = new GetisOrd(new InverseWeight(radius, q));
 		
@@ -28,17 +31,18 @@ public class Tester {
 		short x = 0;
 		short y = 0;
 		Datapoint dp1 = go.compute(data, x, y, radius);
-		System.out.println("I: " + dp1.getValue(featureIdx));
+		System.out.println("(0,0) -> "+ dp1.getValue(featureIdx));
 		
+		/*
 		x = 5;
 		y = 0;
 		Datapoint dp2 = go.compute(data, x, y, radius);
-		System.out.println("II: " + dp2.getValue(featureIdx));
+		System.out.println("(5,0): " + dp2.getValue(featureIdx));
 		
 		x = 5;
 		y = 5;
 		Datapoint dp3 = go.compute(data, x, y, radius);
-		System.out.println("III: " + dp3.getValue(featureIdx));
+		System.out.println("(5,5): " + dp3.getValue(featureIdx));*/
 	
 	}
 }

@@ -66,6 +66,10 @@ public abstract class Data implements Iterable<Datapoint> {
 		return (short) this.datapoints.length;
 	}
 	
+	public short size(){
+		return (short) (this.getHeight() * this.getWidth());
+	}
+	
 	public Datapoint getDatapoint(short row, short col){
 		return this.datapoints[row][col];
 	}
@@ -90,7 +94,6 @@ public abstract class Data implements Iterable<Datapoint> {
 	 * verifica che il valore assegnato sia un valore consentito dalla feature stessa
 	 */
 	protected void scaling(){
-		
 		for(Datapoint dp : this){
 			int i = 0;
 			

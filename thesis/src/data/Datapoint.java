@@ -19,8 +19,8 @@ public class Datapoint implements Iterable<Double> {
 		final int Y_POS = 1;
 		final int FIRST_VALUE_POS = 2;
 		
-		this.x = (short) ((Double)params.get(X_POS)).intValue();
-		this.y = (short) ((Double)params.get(Y_POS)).intValue();
+		this.x = (short) (((Double)params.get(X_POS)).intValue() - 1);
+		this.y = (short) (((Double)params.get(Y_POS)).intValue() - 1);
 		for(int i = FIRST_VALUE_POS; i < params.size(); i++)
 			values.add((Double)params.get(i));
 	}

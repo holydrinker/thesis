@@ -7,26 +7,30 @@ import data.Datapoint;
 import data.Feature;
 import distance.WeightI;
 
-public class GetisOrdSingleFeature {
-	private Feature f;
+public class GetisOrdSingleFeature_FUORI {
+	private int featureIdx;
 	private HashSet<Datapoint> neighborhood;
 	private WeightI weight;
 	
 	//Saving variables that are usefull in computing NUM and DEN
 	private double z = 0d;
-	private short featureIdx;
-	private short n = 0; //dataset size. init in computeS
+	private short n;
 	
-	public GetisOrdSingleFeature(Feature f, HashSet<Datapoint> neighborhood, WeightI weight) {
-		this.f = f;
+	public GetisOrdSingleFeature_FUORI(int featureIdx, HashSet<Datapoint> neighborhood, WeightI weight) {
+		this.featureIdx = featureIdx;
 		this.neighborhood = neighborhood;
-		this.weight = weight;
+		this.weight = weight;	
 	}
 	
 	double compute(Data data, short x, short y){
+		this.n = data.size();		
 		this.z = computeZ(data); 
 		double S = computeS(data);
-		double L = computeL(data, x, y);
+		double L = computeL(x, y);
+		//System.out.println("feature: " + data.getFeatureVector().getFeature(featureIdx).getName());
+		//System.out.println("z: " + z);
+		//System.out.println("S: " + S);
+		//System.out.println("L: " + L);
 		
 		//Using just one loop I can compute NUM and DEN (just SUM)
 		double num = 0d;
@@ -67,26 +71,13 @@ public class GetisOrdSingleFeature {
 		return ( num / den );
 	}
 	
-	//Compute z signed and initialize n
+	//Compute z, signed and initialize n and save featureIdx
 	private double computeZ(Data data){
 		double z = 0;
-		featureIdx = 0;
-		
-		for(Object feature : data.getFeatureVector()){
-			if(((Feature)feature).equals(f)){	
-				for(Object obj : data){
-					n++;
-					z += ((Datapoint)obj).getValue(featureIdx);
-				}
-				z = z / n;
-				break;
-			}
-			else {
-				featureIdx++;
-			}
+		for(Object obj : data){
+			z += ((Datapoint)obj).getValue(featureIdx);
 		}
-		
-		return z;
+		return ( z / n );
 	}
 	
 	//Computing S^2
@@ -101,11 +92,12 @@ public class GetisOrdSingleFeature {
 	}
 	
 	//Computing Lambda(i)
-	private double computeL(Data data, short x, short y){
+	private double computeL(short x, short y){
 		double sum = 0d;
-		for(Object obj : data){
-			Datapoint dp = (Datapoint)obj;
-			sum += weight.compute(x, y, dp.x, dp.y); //calcola il peso anche con se stesso ma non fa niente, tanto è zero
+		
+		for(Object obj : neighborhood){
+			Datapoint neighbour = (Datapoint)obj;
+			sum +=  weight.compute(x, y, neighbour.x, neighbour.y);
 		}
 		return sum;
 	}
