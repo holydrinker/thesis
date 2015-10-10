@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import data.*;
+import exception.InputFileException;
 
 public class StreamGenerator {
 	private FeatureVectorTO fvTO;
@@ -64,7 +65,7 @@ public class StreamGenerator {
 						line = br.readLine();
 					}
 					
-				} else {
+				} else if(!firstWord.equalsIgnoreCase("@relation")){
 					throw new InputFileException();
 				}
 			
