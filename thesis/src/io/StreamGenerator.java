@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.stream.Stream;
 
 import data.*;
 import exception.InputFileException;
@@ -90,4 +91,22 @@ public class StreamGenerator {
 		return this.dataTO;
 	}
 
+	public static void main(String[] args) {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("dataset/temp_inputFile.arff"));
+			
+			String line = br.readLine();
+			while(line != null){
+				System.out.println(line);
+				line = br.readLine();
+			}
+			br.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

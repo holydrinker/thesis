@@ -12,6 +12,7 @@ import exception.PcaException;
 import io.DataTO;
 import io.FeatureVectorTO;
 import io.PCA;
+import io.PCA_temp;
 import io.StreamGenerator;
 
 public class Runner {
@@ -42,14 +43,15 @@ public class Runner {
 		StreamGenerator sg;
 		if(pca.equalsIgnoreCase(DO_PCA)){
 			System.out.print(" applying pca...");
-			sg = new PCA(fileName).createStreamGenerator();
+			sg = new PCA_temp(fileName).createStreamGenerator();
 		} else if(pca.equalsIgnoreCase(DONT_DO_PCA)) {
 			System.out.print("...");
 			sg = new StreamGenerator(filePath);
 		} else {
 			throw new PcaException();
 		}
-		System.exit(0);
+		System.out.println("End temp test");
+		
 		
 		//Build transfer obejcts
 		FeatureVectorTO fvTO = sg.getFeatureVectorTO();

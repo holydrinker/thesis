@@ -1,10 +1,12 @@
 @relation inputFile
+
 @attribute coord_x numeric
 @attribute coord_y numeric
 @attribute temperatura numeric
 @attribute value numeric
 @attribute vento numeric
 @attribute popolazione numeric
+
 @data
 1,1,11,3,40,20000,2
 1,2,12,3.5,38,100,3
