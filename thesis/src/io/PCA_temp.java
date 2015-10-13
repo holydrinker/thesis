@@ -3,8 +3,11 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
+import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.filters.Filter;
@@ -17,7 +20,7 @@ public class PCA_temp {
 	private String fileName;
 	private final String relationName; //doc update
 	private String dir = "dataset/";
-	private HashMap<Integer, Coord> coordMap = new HashMap<Integer, Coord>();
+	private ArrayList<Coord> coordList = new ArrayList<Coord>();
 	
 	public PCA_temp(String fileName, int maxAttributeNames) {
 		this.relationName = fileName;
@@ -60,7 +63,7 @@ public class PCA_temp {
 			}
 			
 			//restore coordinates
-			//restoreCoord(newDataset, coordX_name, coordY_name); TODO
+			restoreCoord(newDataset, coordX_name, coordY_name); 
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,7 +84,7 @@ public class PCA_temp {
 	}
 	
 	/**
-	 * Save the coordinates into a map
+	 * Save the coordinates into this.map
 	 * @param dataset
 	 */
 	private void saveCoord(Instances dataset){
@@ -89,32 +92,43 @@ public class PCA_temp {
 			Instance instance = dataset.get(i);
 			double x = instance.value(0);
 			double y = instance.value(1);
-			coordMap.put(i, new Coord(x, y));
+			coordList.add(i, new Coord(x,y));
 		}
 	}
 	
 	/**
-	 * Re-inject coordinates from the map
+	 * Re-inject coordinates from the this.map
 	 * @param newDataset
 	 * @param coordX_name
 	 * @param coordY_name
 	 */
 	private void restoreCoord(Instances newDataset, String coordX_name, String coordY_name){
 		try {
-			Add add = new Add();
-			add.setAttributeName(coordX_name);
-			add.setInputFormat(newDataset);
-			newDataset = Filter.useFilter(newDataset, add);
+			Attribute x = new Attribute(coordX_name);
+			Attribute y = new Attribute(coordY_name);
+			newDataset.insertAttributeAt(y, 0);
+			newDataset.insertAttributeAt(x, 0);
+			
+			int i = 0;
+			for(Instance inst : newDataset){
+				Coord coord = this.coordList.get(i);
+				System.out.println(coord.x + "," + coord.y);
+				inst.setValue(x, coord.x);
+				inst.setValue(y, coord.y);
+				i++;
+			}
+			
+			System.out.println("[restore done]");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	private class Coord{
-		double x;
-		double y;
+		Double x;
+		Double y;
 		
-		public Coord(double x, double y) {
+		public Coord(Double x, Double y) {
 			this.x = x;
 			this.y = y;
 		}
