@@ -36,8 +36,8 @@ public class AutoDataset extends Data {
 		//Switch old matrix with autocorrlated values' matrix
 		this.datapoints = acDatapoints;
 		
-		//Scalo i valori della matrice, che ora sono i valori di autocorrelazione
-		//super.scaling();
+		//Scaling autocorrelation value
+		super.scaling();
 	}
 	
 }

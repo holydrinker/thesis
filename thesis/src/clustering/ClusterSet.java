@@ -16,9 +16,9 @@ public class ClusterSet implements Iterable<Cluster> {
 		this.clusters = clusters;
 	}
 
-	void exportCsv(Data data){
+	void exportCsv(String csvName, Data data){
 		try {
-			PrintWriter pw = new PrintWriter("D:/clusteringOutput.csv");
+			PrintWriter pw = new PrintWriter("output/"+ csvName +".csv");
 			String nextLine = "clusterID;pixelID;coord_X;coord_Y;";
 			
 			//Write feature vector

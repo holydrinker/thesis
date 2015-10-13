@@ -33,14 +33,17 @@ public class PCA_temp {
 		this.fileName = fileName + ".arff";
 	}
 
-	public StreamGenerator createStreamGenerator(){
+	/**
+	 * Generate a new arff file in the directory /dataset
+	 */
+	public void createTempArff(){
 		Instances dataset = null;
 		Instances newDataset = null;
 		 
 		//generate new temp input file
 		try {
 			//load dataset and save coordinates
-			dataset = new Instances(new FileReader(dir + fileName));
+			dataset = new Instances(new FileReader(dir + fileName)); //qui muore. nè da eccezione nè niente
 			String coordX_name = dataset.attribute(0).name();
 			String coordY_name = dataset.attribute(1).name();
 			saveCoord(dataset);
@@ -79,8 +82,6 @@ public class PCA_temp {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		return new StreamGenerator(tempPath);
 	}
 	
 	/**
@@ -112,13 +113,11 @@ public class PCA_temp {
 			int i = 0;
 			for(Instance inst : newDataset){
 				Coord coord = this.coordList.get(i);
-				System.out.println(coord.x + "," + coord.y);
-				inst.setValue(x, coord.x);
-				inst.setValue(y, coord.y);
-				i++;
+				inst.setValue(0, coord.x);
+				inst.setValue(1, coord.y);
+				i++;			
 			}
 			
-			System.out.println("[restore done]");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

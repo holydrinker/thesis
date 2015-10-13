@@ -21,7 +21,6 @@ public class Runner {
 	static final String DO_PCA = "pca";
 	static final String DONT_DO_PCA = "nopca";
 	
-	//IL FILE TEMPORANEO VIENE SALVATO SENZA LA FORMATTAZIONE CHE VOGLIO IO, QUINDI DEVO MODIFICARE LO STREAM GENERATOR
 	public static void main(String[] args) {
 		//Start timer
 		double startTime = System.currentTimeMillis(); 
@@ -40,18 +39,18 @@ public class Runner {
 		System.out.print("loading data");
 		
 		//Set the stream generator based on pca option
-		StreamGenerator sg;
+		StreamGenerator sg = null;
 		if(pca.equalsIgnoreCase(DO_PCA)){
 			System.out.print(" applying pca...");
-			sg = new PCA_temp(fileName).createStreamGenerator();
+			new PCA_temp(fileName).createTempArff();
+			filePath.replaceAll(fileName, "temp_"+fileName);
 		} else if(pca.equalsIgnoreCase(DONT_DO_PCA)) {
 			System.out.print("...");
-			sg = new StreamGenerator(filePath);
 		} else {
 			throw new PcaException();
 		}
-		System.out.println("End temp test");
 		
+		sg = new StreamGenerator(filePath);
 		
 		//Build transfer obejcts
 		FeatureVectorTO fvTO = sg.getFeatureVectorTO();
@@ -90,12 +89,15 @@ public class Runner {
 		short k = (short)(Integer.parseInt(centroidsNumber));
 		Clustering PAM = new PAM(k, data);
 		PAM.generateClusters();
-		System.out.println("Everything done:");
+		
+		//missing sampling
 		
 		//Export clusters in csv
-		PAM.exportCsv();
+		String csvName = "clustering_" + args[0] + "_" + args[1] + "_" + args[2] + "_" + args[3];
+		PAM.exportCsv(csvName);
 		
 		//end timer
+		System.out.println("Everything done in:");
 		double endTime = System.currentTimeMillis(); 
 		double time = endTime - startTime;
 		System.out.println("millisecondi = " + time);

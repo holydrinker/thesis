@@ -44,14 +44,6 @@ public class PAM extends Clustering {
 		System.out.print("clustering...");
 		populateClusters(medoids);
 		System.out.println("done.\n");
-		
-		/* Print cluster test
-		for(Cluster cluster : super.clusterSet){
-			System.out.println("cluster id: " + cluster.getID());
-			for(Datapoint dp : cluster){
-				System.out.println(dp.getID());
-			}
-		}*/
 	}
 	
 	private Set<Datapoint> generateMedoids(){

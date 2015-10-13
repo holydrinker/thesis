@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.stream.Stream;
 
 import data.*;
 import exception.InputFileException;
@@ -66,7 +65,10 @@ public class StreamGenerator {
 						line = br.readLine();
 					}
 					
-				} else if(!firstWord.equalsIgnoreCase("@relation")){
+				} else if(firstWord.equalsIgnoreCase("@relation")){
+					line = br.readLine();
+					
+				} else {
 					throw new InputFileException();
 				}
 			
@@ -91,9 +93,9 @@ public class StreamGenerator {
 		return this.dataTO;
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		try {
-			BufferedReader br = new BufferedReader(new FileReader("dataset/temp_inputFile.arff"));
+			BufferedReader br = new BufferedReader(new FileReader("dataset/temp_indianpine.arff"));
 			
 			String line = br.readLine();
 			while(line != null){
@@ -107,6 +109,6 @@ public class StreamGenerator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 }
