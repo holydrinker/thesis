@@ -21,6 +21,7 @@ public class AutoDataset extends Data {
 		final int MAX_Y = this.getWidth();
 		
 		//Creo e popolo una nuova matrice che rimpiazzerà il dataset appena costruita.
+		System.out.println("Computing autocorrelation indexes...");
 		Datapoint[][] acDatapoints = new Datapoint[MAX_X][MAX_Y];
 		for(int x = 0; x < MAX_X; x++){
 			for(int y = 0; y < MAX_Y; y++){
@@ -38,6 +39,8 @@ public class AutoDataset extends Data {
 		
 		//Scaling autocorrelation value
 		super.scaling();
+		
+		System.out.println("Done!\n");
 	}
 	
 }

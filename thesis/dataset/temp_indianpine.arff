@@ -2,7 +2,6 @@
 
 @attribute coord_x numeric
 @attribute coord_y numeric
-@attribute a0 numeric
 @attribute a1 numeric
 @attribute a2 numeric
 @attribute a3 numeric
@@ -11,6 +10,7 @@
 @attribute a6 numeric
 @attribute a7 numeric
 @attribute a8 numeric
+@attribute a9 numeric
 
 @data
 1,1,5.217365,-4.981295,0.970339,0.586266,0.74806,0.857551,-0.598928,0.885274,0.567386

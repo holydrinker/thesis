@@ -59,9 +59,9 @@ public class Runner {
 		//Build autocorrelation (optional) 
 		AutocorrelationI ac = null;
 		if(datasetType.equalsIgnoreCase(AUTO_DATASET)){
-			autocorrelationType = "GO"; //GO to use GetisOrd
-			radius = "3";
-			q = "3";
+			autocorrelationType = args[4]; //GO to use GetisOrd
+			radius = args[5];
+			q = args[6];
 			
 			//wrap args to call factory for Autocorrelation
 			ArrayList<Object> paramsAc = new ArrayList<Object>();

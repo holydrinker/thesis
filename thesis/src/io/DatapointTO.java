@@ -8,6 +8,5 @@ public class DatapointTO extends TransferObject {
 		super(param);
 		
 	}
-	//Nelle prima due posizioni ci sono le coordinate spaziali, che verranno utilizzate per posizionare ogni singolo datapoint nella cella della matrice corrspondente
 	
 }

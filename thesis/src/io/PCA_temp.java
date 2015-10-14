@@ -62,7 +62,7 @@ public class PCA_temp {
 			newDataset.setRelationName(relationName);
 			int numAtt = newDataset.numAttributes();
 			for(int i = 0; i < numAtt; i++){
-				newDataset.renameAttribute(i, "a"+i);
+				newDataset.renameAttribute(i, "a"+(i+1));
 			}
 			
 			//restore coordinates

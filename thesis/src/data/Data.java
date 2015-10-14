@@ -86,21 +86,21 @@ public abstract class Data implements Iterable<Datapoint> {
 		return new Coord(row, col);
 	}
 	
-	
-	
 	/**
 	 * Una volta popolato il dataset, itera e per ogni valore di ogni datapoint fa il seguente controllo:
 	 * se il valore è associato ad una feature continua lo scala, se il valore è associato ad una feature discreta,
 	 * verifica che il valore assegnato sia un valore consentito dalla feature stessa
 	 */
 	protected void scaling(){
+		final int FIRST_VALUE = 0;
+		
 		for(Datapoint dp : this){
-			int i = 0;
-			
+			int i = FIRST_VALUE;
+		
 			for(Object obj : fv){
 				Feature f = (Feature)obj;
 				Double value = dp.getValue(i);
-				
+		
 				if (f instanceof DiscreteFeature) {
 					if (!checkDiscreteValue((DiscreteFeature) f, value))
 						throw new InvalidDiscreteFeature(value + " is not a  valid value for feature: " + f.name);

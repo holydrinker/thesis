@@ -19,6 +19,7 @@ public class StreamGenerator {
 		LinkedList<Object> fvParams = new LinkedList<Object>();
 		LinkedList<Object> dataParams = new LinkedList<Object>();
 		
+		int attributeCount = 0;
 		String line;
 		String[] splittedLine;
 		
@@ -31,25 +32,28 @@ public class StreamGenerator {
 				String firstWord = splittedLine[0];
 				
 				if(firstWord.equalsIgnoreCase("@attribute")){
-					String name = splittedLine[1];
-					String category = splittedLine[2];
-					
-					if(category.equalsIgnoreCase("numeric"))
-						fvParams.add(new ContinueFeature(name));
-					
-					else if(category.equalsIgnoreCase("discrete")){
-						String values = splittedLine[splittedLine.length-1];
-						values = values.substring(1, values.length() - 1);
-						String[] splittedValues = values.split(",");
+					//omit first and second attribute (x,y)
+					if(attributeCount > 1){
+						String name = splittedLine[1];
+						String category = splittedLine[2];
 						
-						HashSet<String> set = new HashSet<String>();
-						for(String s : splittedValues)
-							set.add(s);
-						
-						fvParams.add(new DiscreteFeature(name, set));
+						if(category.equalsIgnoreCase("numeric")){
+							fvParams.add(new ContinueFeature(name));
+						} else if(category.equalsIgnoreCase("discrete")){
+							String values = splittedLine[splittedLine.length-1];
+							values = values.substring(1, values.length() - 1);
+							String[] splittedValues = values.split(",");
+							
+							HashSet<String> set = new HashSet<String>();
+							for(String s : splittedValues)
+								set.add(s);
+							
+							fvParams.add(new DiscreteFeature(name, set));
+						}
 					}
 						
 					line = br.readLine();
+					attributeCount++;
 					
 				} else if(firstWord.equalsIgnoreCase("@data")) {
 					line = br.readLine();
@@ -58,8 +62,9 @@ public class StreamGenerator {
 						splittedLine = line.split(",");
 						LinkedList<Object> dpParams = new LinkedList<Object>();
 						
-						for(String s : splittedLine)
+						for(String s : splittedLine){
 							dpParams.add(Double.parseDouble(s));
+						}
 						dataParams.add(new DatapointTO(dpParams));
 						
 						line = br.readLine();
@@ -72,7 +77,9 @@ public class StreamGenerator {
 					throw new InputFileException();
 				}
 			
-			}
+				}
+			
+			
 				
 			fvTO = new FeatureVectorTO(fvParams);
 			dataTO = new DataTO(dataParams);
