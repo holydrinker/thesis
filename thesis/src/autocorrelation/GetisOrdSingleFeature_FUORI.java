@@ -23,7 +23,7 @@ public class GetisOrdSingleFeature_FUORI {
 	}
 	
 	double compute(Data data, short x, short y){
-		this.n = data.size();		
+		this.n = data.size();		//modificare deve contare effettivamente quanti valori diversi da null sono nella matrice
 		this.z = computeZ(data); 
 		double S = computeS(data);
 		double L = computeL(x, y);

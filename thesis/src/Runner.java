@@ -11,9 +11,10 @@ import exception.DatasetException;
 import exception.PcaException;
 import io.DataTO;
 import io.FeatureVectorTO;
-import io.PCA;
 import io.PCA_temp;
 import io.StreamGenerator;
+import metrics.LinearMetrics;
+import metrics.Metrics;
 
 public class Runner {
 	static final String DATASET = "dataset";
@@ -39,6 +40,7 @@ public class Runner {
 		System.out.print("loading data");
 		
 		//Set the stream generator based on pca option
+		//Sostituire con un altro factory
 		StreamGenerator sg = null;
 		if(pca.equalsIgnoreCase(DO_PCA)){
 			System.out.print(" applying pca...");
@@ -93,8 +95,15 @@ public class Runner {
 		//missing sampling
 		
 		//Export clusters in csv
-		String csvName = "clustering_" + args[0] + "_" + args[1] + "_" + args[2] + "_" + args[3];
+		String csvName = "clustering_" + args[0] + "_" + args[1] + "_" + args[2] + "_" + args[3] + "_medoid";
 		PAM.exportCsv(csvName);
+		
+		// Metrics
+		String groundTruthPath = "dataset/indianpine.csv";
+		String outputPath = "output/" + csvName;
+		
+		Metrics metrics = new LinearMetrics(groundTruthPath, outputPath);
+		System.out.println("computing purity...: " + metrics.purity());
 		
 		//end timer
 		System.out.println("Everything done in:");

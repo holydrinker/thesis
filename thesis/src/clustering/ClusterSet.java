@@ -19,9 +19,9 @@ public class ClusterSet implements Iterable<Cluster> {
 	void exportCsv(String csvName, Data data){
 		try {
 			PrintWriter pw = new PrintWriter("output/"+ csvName +".csv");
-			String nextLine = "clusterID;pixelID;coord_X;coord_Y;";
 			
 			//Write feature vector
+			String nextLine = "clusterID;pixelID;coord_X;coord_Y;";
 			for(Feature feature : data.getFeatureVector()){
 				nextLine += (feature.getName() + ";");
 			}
@@ -31,15 +31,8 @@ public class ClusterSet implements Iterable<Cluster> {
 			//Write clusters
 			for(Cluster cluster : this.clusters){
 				short clusterID = cluster.getID();
-				
 				for(Datapoint dp : cluster){
-					short id = dp.getID();
-					short x = data.getCoord(id).x;
-					short y = data.getCoord(id).y;
-					nextLine = clusterID + ";" + id + ";" + x + ";" + y + ";"; //+1 alle coordinate perchè i pixel partivano da 1 ma nella mia matrice partivano da 0
-					for(Object value : dp){
-						nextLine += value + ";";
-					}
+					nextLine = clusterID + ";" + dp.toString();
 					nextLine = nextLine.substring(0, nextLine.length() - 1);
 					pw.println(nextLine);
 				}
@@ -55,5 +48,9 @@ public class ClusterSet implements Iterable<Cluster> {
 	@Override
 	public Iterator<Cluster> iterator() {
 		return this.clusters.iterator();
+	}
+	
+	private void writePoint(short clusterId, Datapoint dp){
+		
 	}
 }

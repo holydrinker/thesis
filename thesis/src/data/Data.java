@@ -75,18 +75,6 @@ public abstract class Data implements Iterable<Datapoint> {
 	}
 	
 	/**
-	 * Recovery of the datapoint's coordinates from his ID.
-	 * @param id
-	 * @return
-	 */
-	public Coord getCoord(short id){
-		int width = this.getWidth();
-		short row = (short) (id / width);
-		short col = (short) (id - (row * width));
-		return new Coord(row, col);
-	}
-	
-	/**
 	 * Una volta popolato il dataset, itera e per ogni valore di ogni datapoint fa il seguente controllo:
 	 * se il valore è associato ad una feature continua lo scala, se il valore è associato ad una feature discreta,
 	 * verifica che il valore assegnato sia un valore consentito dalla feature stessa

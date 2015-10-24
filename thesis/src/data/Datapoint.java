@@ -47,4 +47,13 @@ public class Datapoint implements Iterable<Double> {
 	public Iterator<Double> iterator() {
 		return values.iterator();
 	}
+	
+	@Override
+	public String toString() {
+		String result = this.pointID + ";" + (this.x + 1) + ";" + (this.y + 1) + ";";
+		for(Object value : this.values){ 
+			result += value + ";";
+		}
+		return result;
+	}
 }

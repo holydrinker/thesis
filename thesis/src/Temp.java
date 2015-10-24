@@ -1,29 +1,20 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.HashMap;
+
+import metrics.LinearMetrics;
+import metrics.Metrics;
 
 /*
  * Classe utilizzata solo per fare delle prove
  */
 public class Temp {
-	
-	public static void main(String[] args) {
-		BufferedReader br;
-		try {
-			
-			br = new BufferedReader(new FileReader("dataset/prova.txt"));
-			String line = br.readLine();
-			System.out.println(line);
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-	}
 
+	public static void main(String[] args) {
+		String groundTruthPath = "dataset/indianpine.csv";
+		String outputPath = "output/clustering_indianpine_dataset_16_nopca_medoid.csv";
+		
+		Metrics metrics = new LinearMetrics(groundTruthPath, outputPath);
+		double purity = metrics.purity();
+		System.out.println("purity: " + purity);
+	}
+	
 }

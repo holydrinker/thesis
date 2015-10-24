@@ -13,7 +13,7 @@ public class Tester {
 		System.out.println("autocorrelation.Tester\n");
 		
 		//Giusto un dataset per il testing del package
-		StreamGenerator sg = new StreamGenerator("D:/dataset/ac-simili.txt");
+		StreamGenerator sg = new StreamGenerator("dataset/ac-dissimili.txt");
 		Dataset data = new Dataset(sg.getFeatureVectorTO(), sg.getDataTO());
 		
 		//Stampo il dataset facendo vedere solo la seconda feature, quella che mi interessa, cioè VALUE
@@ -23,15 +23,23 @@ public class Tester {
 		System.out.println("");
 		
 		//Setting up autcorrelation
-		short radius = 5;
+		short radius = 1;
 		byte q = 3;
 		GetisOrd go = new GetisOrd(new InverseWeight(radius, q));
 		
 		//Test
-		short x = 0;
-		short y = 0;
-		Datapoint dp1 = go.compute(data, x, y, radius);
-		System.out.println("(0,0) -> "+ dp1.getValue(featureIdx));
+		short x = 5;
+		short y = 6;
+		
+		Datapoint dp1 = null;
+		for(int i = 0; i <= 5; i++){
+			for(int j = 0; j <= 6; j++){
+				dp1 = go.compute(data, (short)i, (short)j, radius);
+				System.out.println(dp1.getValue(featureIdx));	
+			}
+		}
+		
+		//System.out.println("result: "+ dp1.getValue(featureIdx));
 		
 		/*
 		x = 5;

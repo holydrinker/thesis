@@ -68,23 +68,23 @@ public class GetisOrd implements AutocorrelationI {
 			endY = MAX_Y;
 				
 		//Generate
-		//System.out.println("Neighborhood:");
+		System.out.print("Neighborhood("+x+","+y+")");
 		for(short loopX = startX; loopX <= endX; loopX++){
 			for(short loopY = startY; loopY <= endY; loopY++){
 				if(!(loopY == y && loopX == x)){
 					
 					Datapoint neighbour = data.getDatapoint(loopX, loopY);
 					if(!(neighbour == null)){
-						double distance = new EuclideanDistance(x, y, loopX, loopY).compute();
-						if(distance <= radius){
-							//System.out.println("(" + loopX + "," + loopY + ")");
+						//double distance = new EuclideanDistance(x, y, loopX, loopY).compute();
+						//if(distance <= radius){
+							System.out.print(",(" + loopX + "," + loopY + ")");
 							neighborhood.add(data.getDatapoint(loopX, loopY));
-						}
+						//}
 					}
 				}
 			}
 		}
-		
+		System.out.println("");
 		return neighborhood;
 	}
 }
