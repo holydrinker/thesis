@@ -16,5 +16,21 @@ public class Dataset extends Data {
 	public Iterator<Datapoint> iterator() {
 		return super.iterator();
 	}
+	
+	@Override
+	public String toString() {
+		String result = this.fv.toString() + "\n";
+		
+		int height = this.getHeight();
+		int width = this.getWidth();
+		
+		for(int i = 0; i < width; i++){
+			for(int j = 0; j < height; j++){
+				Datapoint datapoint = this.datapoints[i][j];
+				result += datapoint.toString() + "\n";
+			}
+		}
+		return result;
+	}
 
 }

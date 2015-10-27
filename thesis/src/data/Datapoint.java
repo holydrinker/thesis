@@ -25,6 +25,11 @@ public class Datapoint implements Iterable<Double> {
 			values.add((Double)params.get(i));
 	}
 	
+	public Datapoint(short x, short y) {
+		this.x = x;
+		this.y = y;
+	}
+	
 	public short getID(){
 		return this.pointID;
 	}
@@ -35,6 +40,10 @@ public class Datapoint implements Iterable<Double> {
 	
 	public void setValue(int idx, double newValue){
 		values.set(idx, newValue);
+	}
+	
+	public void addValue(double value){
+		this.values.add(value);
 	}
 
 	@Override

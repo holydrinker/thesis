@@ -59,6 +59,15 @@ public class Cluster implements Iterable<Datapoint>{
 		return this.id == otherCluster.id;
 	}
 	
+	@Override
+	public String toString() {
+		String result = "";
+		for(Datapoint datapoint : this){
+			result += datapoint.toString() + "\n";
+		}
+		return result;
+	}
+	
 	/* Used in order to test cluster.iterator()
 	public static void main(String[] args) {
 		//Make a datapoint

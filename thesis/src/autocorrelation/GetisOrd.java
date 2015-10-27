@@ -6,11 +6,11 @@ import data.ContinueFeature;
 import data.Data;
 import data.Datapoint;
 import data.Feature;
-import distance.EuclideanDistance;
 import distance.WeightI;
 
 public class GetisOrd implements AutocorrelationI {
 	private WeightI weight;
+	private double Z;
 	
 	public GetisOrd(WeightI weight) {
 		this.weight = weight;
@@ -18,23 +18,27 @@ public class GetisOrd implements AutocorrelationI {
 	
 	@Override
 	public Datapoint compute(Data data, short x, short y, short radius) {
-		Datapoint dp = data.getDatapoint(x, y);
+		Datapoint oldPoint = data.getDatapoint(x, y);
+		Datapoint newPoint = new Datapoint(x, y);
+		
 		HashSet<Datapoint> neighborhood = computeNeighborhood(data, x, y, radius);
 		
-		int valueIdx = 0;
 		int featureIdx = 0;
-		
 		for(Object obj : data.getFeatureVector()){
 			Feature f = (Feature) obj;
+			double newValue;
+			
 			if((Feature)f instanceof ContinueFeature){
-				double newFeatureValue = new GetisOrdSingleFeature_FUORI(featureIdx, neighborhood, weight).compute(data, x, y);
-				dp.setValue(valueIdx, newFeatureValue);
+				GetisOrdSingleFeature gosf = new GetisOrdSingleFeature(featureIdx, neighborhood, weight);
+				newValue = gosf.compute(data, x, y);
+			} else {
+				newValue = oldPoint.getValue(featureIdx);
 			}
-			valueIdx++;
+			
+			newPoint.addValue(newValue);
 			featureIdx++;
 		}
-	
-		return dp;
+		return newPoint;
 	}
 	
 	/**
@@ -68,23 +72,20 @@ public class GetisOrd implements AutocorrelationI {
 			endY = MAX_Y;
 				
 		//Generate
-		System.out.print("Neighborhood("+x+","+y+")");
+		System.out.print("Neighborhood("+x+","+y+") = {");
 		for(short loopX = startX; loopX <= endX; loopX++){
 			for(short loopY = startY; loopY <= endY; loopY++){
 				if(!(loopY == y && loopX == x)){
 					
 					Datapoint neighbour = data.getDatapoint(loopX, loopY);
 					if(!(neighbour == null)){
-						//double distance = new EuclideanDistance(x, y, loopX, loopY).compute();
-						//if(distance <= radius){
-							System.out.print(",(" + loopX + "," + loopY + ")");
+							System.out.print(" (" + loopX + "," + loopY + ") ");
 							neighborhood.add(data.getDatapoint(loopX, loopY));
-						//}
 					}
 				}
 			}
 		}
-		System.out.println("");
+		System.out.println("}");
 		return neighborhood;
 	}
 }

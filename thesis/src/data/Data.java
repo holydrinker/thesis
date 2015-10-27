@@ -11,11 +11,10 @@ import io.FeatureVectorTO;
 public abstract class Data implements Iterable<Datapoint> {
 	protected FeatureVector fv;
 	protected Datapoint[][] datapoints;
+	protected short size = 0;
 	
 	public Data(FeatureVectorTO fvTO, DataTO stream) {
 		fv = new FeatureVector(fvTO);
-		
-		//IMPORTANTE: le x sono le righe e le y sono le colonne. quindi il numero di righe è l'altezza e il numero di colonne la lunghezza
 		
 		//BUILD MATRIX
 		int width = -1;
@@ -48,8 +47,9 @@ public abstract class Data implements Iterable<Datapoint> {
 			short id = (short) ((row * width) + col);
 			
 			Datapoint dp = new Datapoint(id, dpTO);
-			fv.updateMinMax(dp); //update min and max for the feature to allow the scaling operation
+			fv.updateMinMax(dp);
 			datapoints[row][col] = dp;
+			size++;
 		}
 		
 	}
@@ -67,7 +67,7 @@ public abstract class Data implements Iterable<Datapoint> {
 	}
 	
 	public short size(){
-		return (short) (this.getHeight() * this.getWidth());
+		return this.size;
 	}
 	
 	public Datapoint getDatapoint(short row, short col){
@@ -101,16 +101,6 @@ public abstract class Data implements Iterable<Datapoint> {
 			}
 		}
 	}
-	
-	/*Print id test
-	 public void printIdMatrix(){
-		 for(int row = 0; row < this.getHeight(); row++){
-			 for(int col = 0; col< this.getWidth(); col++){
-				System.out.print(this.datapoints[row][col].getID() + "   "); 
-			 }
-			 System.out.println("");
-		 }
-	 }*/
 	
 	/**
 	 * Controlla se value rientra nei valori ammessi dalla feature f

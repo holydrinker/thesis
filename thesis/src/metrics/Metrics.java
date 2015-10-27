@@ -1,8 +1,5 @@
 package metrics;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+
 import java.util.HashMap;
 
 public abstract class Metrics {
@@ -70,6 +67,8 @@ public abstract class Metrics {
 					maxOccurrences = occurrences;
 				}
 			}
+			
+			//Stampa la purity di ogni cluster. Si può eliminare.
 			System.out.println(((double)maxOccurrences) / count);
 			return ((double)maxOccurrences) / count;
 		}

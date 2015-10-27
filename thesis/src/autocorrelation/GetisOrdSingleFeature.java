@@ -7,30 +7,33 @@ import data.Datapoint;
 import data.Feature;
 import distance.WeightI;
 
-public class GetisOrdSingleFeature_FUORI {
+public class GetisOrdSingleFeature {
 	private int featureIdx;
 	private HashSet<Datapoint> neighborhood;
 	private WeightI weight;
-	
-	//Saving variables that are usefull in computing NUM and DEN
-	private double z = 0d;
 	private short n;
+	private double Z;
+	private double S;
+	private double L;
 	
-	public GetisOrdSingleFeature_FUORI(int featureIdx, HashSet<Datapoint> neighborhood, WeightI weight) {
+	public GetisOrdSingleFeature(int featureIdx, HashSet<Datapoint> neighborhood, WeightI weight) {
 		this.featureIdx = featureIdx;
 		this.neighborhood = neighborhood;
 		this.weight = weight;	
 	}
 	
 	double compute(Data data, short x, short y){
-		this.n = data.size();		//modificare deve contare effettivamente quanti valori diversi da null sono nella matrice
-		this.z = computeZ(data); 
-		double S = computeS(data);
-		double L = computeL(x, y);
-		//System.out.println("feature: " + data.getFeatureVector().getFeature(featureIdx).getName());
-		//System.out.println("z: " + z);
-		//System.out.println("S: " + S);
-		//System.out.println("L: " + L);
+		this.n = data.size();
+		Z = computeZ(data, featureIdx);
+		S = computeS(data, featureIdx);
+		L = computeL(x, y);
+		
+		/* Test
+		if(featureIdx == 1){
+			System.out.println("z: " + Z);
+			System.out.println("S: " + S);
+			System.out.println("L: " + L);
+		} */
 		
 		//Using just one loop I can compute NUM and DEN (just SUM)
 		double num = 0d;
@@ -47,7 +50,7 @@ public class GetisOrdSingleFeature_FUORI {
 			num += (lij * zj);
 			sumDen += (Math.pow(lij, 2));
 		}
-		num -= z*L;
+		num -= Z*L;
 
 		/*
 		 * Per non far venire numeri negativi sotto aggiungo questo controllo, perchè molto spesso quando confronto il datapoint centrale con le celle
@@ -71,27 +74,26 @@ public class GetisOrdSingleFeature_FUORI {
 		return ( num / den );
 	}
 	
-	//Compute z, signed and initialize n and save featureIdx
-	private double computeZ(Data data){
-		double z = 0;
+	// Compute Z
+	private double computeZ(Data data, int featureIdx){
+		double z = 0d;
 		for(Object obj : data){
 			z += ((Datapoint)obj).getValue(featureIdx);
 		}
 		return ( z / n );
 	}
 	
-	//Computing S^2
-	private double computeS(Data data){
+	// Compute S^2
+	private double computeS(Data data, int featureIdx){
 		double sum = 0d;
 		for(Object dp : data){
 			double zj = ((Datapoint)dp).getValue(featureIdx);
-			sum += Math.pow((zj - z), 2);
+			sum += Math.pow((zj - Z), 2);
 		}
-		
 		return sum / n; 
 	}
 	
-	//Computing Lambda(i)
+	// Compute L(i)
 	private double computeL(short x, short y){
 		double sum = 0d;
 		

@@ -35,4 +35,12 @@ public class FeatureVector implements Iterable<Feature>{
 		return features.iterator();
 	}
 	
+	@Override
+	public String toString() {
+		String result = "";
+		for(Feature feature : this){
+			result += feature.name;
+		}
+		return result;
+	}
 }
