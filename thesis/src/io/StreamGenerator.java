@@ -66,7 +66,6 @@ public class StreamGenerator {
 							dpParams.add(Double.parseDouble(s));
 						}
 						dataParams.add(new DatapointTO(dpParams));
-						
 						line = br.readLine();
 					}
 					
@@ -78,8 +77,6 @@ public class StreamGenerator {
 				}
 			
 				}
-			
-			
 				
 			fvTO = new FeatureVectorTO(fvParams);
 			dataTO = new DataTO(dataParams);

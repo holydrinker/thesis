@@ -21,21 +21,6 @@ public class PAM extends Clustering {
 		System.out.print("Building matrix...");
 		this.distanceMatrix = new DistanceMatrix(data);
 		System.out.println("done.");
-		
-		/*Per stampare la matrice rendere publica DistanceMatrix.matrix e utilizzare questo snippet
-		System.out.println("DISTANCE MATRIX");
-		double[][] m = distanceMatrix.matrix;
-		int row = m.length;
-				
-		for (int i = 0; i < row; i++) {
-			int col = m[i].length;
-
-			for (int j = 0; j < col; j++) {
-				System.out.print(m[i][j] + " ");
-			}
-			System.out.println("");
-		}*/
-				
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public class DataFactory implements Factory {
 		DataTO dataTO = (DataTO) params.get(1);
 		
 		if(request.equalsIgnoreCase(DATASET)){
-			returnType = new Dataset(fvTO, dataTO);
+			returnType = new Dataset(fvTO, dataTO, true);
 		} else if (request.equalsIgnoreCase(AUTO_DATASET)){
 			AutocorrelationI ac = (AutocorrelationI) params.get(2);
 			short radius = (short) Integer.parseInt(params.get(3).toString());

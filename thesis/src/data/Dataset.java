@@ -7,9 +7,11 @@ import java.util.Iterator;
 
 public class Dataset extends Data {
 
-	public Dataset(FeatureVectorTO fvTO, DataTO stream) {
+	public Dataset(FeatureVectorTO fvTO, DataTO stream, boolean scaling) {
 		super(fvTO, stream);
-		//super.scaling();
+		if(scaling){
+			super.scaling();
+		}
 	}
 
 	@Override
@@ -24,10 +26,11 @@ public class Dataset extends Data {
 		int height = this.getHeight();
 		int width = this.getWidth();
 		
-		for(int i = 0; i < width; i++){
-			for(int j = 0; j < height; j++){
+		for(int i = 0; i < height; i++){
+			for(int j = 0; j < width; j++){
 				Datapoint datapoint = this.datapoints[i][j];
-				result += datapoint.toString() + "\n";
+				if(datapoint != null)
+					result += datapoint.toString() + "\n";
 			}
 		}
 		return result;

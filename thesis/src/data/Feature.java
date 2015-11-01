@@ -16,4 +16,9 @@ public abstract class Feature {
 		Feature f = (Feature) obj;
 		return this.getName().equals(f.getName());
 	}
+	
+	@Override
+	public String toString() {
+		return this.name;
+	}
 }

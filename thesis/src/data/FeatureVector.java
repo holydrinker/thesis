@@ -39,7 +39,7 @@ public class FeatureVector implements Iterable<Feature>{
 	public String toString() {
 		String result = "";
 		for(Feature feature : this){
-			result += feature.name;
+			result += feature.name + " ";
 		}
 		return result;
 	}

@@ -2,19 +2,20 @@ import java.util.ArrayList;
 
 import autocorrelation.AcFactory;
 import autocorrelation.AutocorrelationI;
+import clustering.ClusterSet;
 import clustering.Clustering;
 import clustering.PAM;
 
 import data.Data;
 import data.DataFactory;
+import evaluation.Metrics;
+import evaluation.MetricsA;
 import exception.DatasetException;
 import exception.PcaException;
 import io.DataTO;
 import io.FeatureVectorTO;
-import io.PCA_temp;
+import io.PCA;
 import io.StreamGenerator;
-import metrics.LinearMetrics;
-import metrics.Metrics;
 
 public class Runner {
 	static final String DATASET = "dataset";
@@ -44,7 +45,7 @@ public class Runner {
 		StreamGenerator sg = null;
 		if(pca.equalsIgnoreCase(DO_PCA)){
 			System.out.print(" applying pca...");
-			new PCA_temp(fileName).createTempArff();
+			new PCA(fileName).createTempArff();
 			filePath.replaceAll(fileName, "temp_"+fileName);
 		} else if(pca.equalsIgnoreCase(DONT_DO_PCA)) {
 			System.out.print("...");
@@ -82,40 +83,58 @@ public class Runner {
 		paramsData.add(radius);
 		
 		//...and than generate dataset!
-		Data data = (Data)new DataFactory().getInstance(datasetType, paramsData); 
+		Data data = (Data)new DataFactory().getInstance(datasetType, paramsData);
+		System.out.println(data.toString());
 		System.out.println("done!\n");
-		
 		//-------------------------------------------------------------------------------------------------------------------------------------		
 		
-		//CLUSTERING
+		
+		//CLUSTERING--------------------------------------------------------------------------------------------------------------------------
 		short k = (short)(Integer.parseInt(centroidsNumber));
 		Clustering PAM = new PAM(k, data);
 		PAM.generateClusters();
-		
-		//missing sampling
-		
-		//Export clusters in csv
-		String csvName = "clustering_" + args[0] + "_" + args[1] + "_" + args[2] + "_" + args[3] + "_medoid";
+		ClusterSet clusterSet = PAM.getClusterSet();
+		String csvName = args[0] + "_" + args[1] + "_" + args[2] + "_" + args[3];
 		PAM.exportCsv(csvName);
+		//------------------------------------------------------------------------------------------------------------------------------------
 		
-		// Metrics
-		String groundTruthPath = "dataset/indianpine.csv";
-		String outputPath = "output/" + csvName;
 		
-		Metrics metrics = new LinearMetrics(groundTruthPath, outputPath);
-		System.out.println("computing purity...: " + metrics.purity());
+		//EVALUATION--------------------------------------------------------------------------------------------------------------------------
+		System.out.println("Computing metrics...");
+		MetricsA metrics = new Metrics(data.getGroundTruth(), clusterSet);
 		
-		//end timer
-		System.out.println("Everything done in:");
+		System.out.print("purity: ");
+		System.out.println(metrics.purity());
+		
+		System.out.print("rand index: ");
+		System.out.println(metrics.randIndex());
+		
+		System.out.print("precision: ");
+		System.out.println(metrics.precision());
+		
+		System.out.print("recall: ");
+		System.out.println(metrics.recall());
+		
+		double beta = 5;
+		System.out.print("F" + beta + " score: ");
+		System.out.println(metrics.fScore(5));
+		
+		//-------------------------------------------------------------------------------------------------------------------------------------
+		
+		
+		//SAMPLING-----------------------------------------------------------------------------------------------------------------------------
+		
+		//-------------------------------------------------------------------------------------------------------------------------------------
+		
+		
+		//END----------------------------------------------------------------------------------------------------------------------------------
 		double endTime = System.currentTimeMillis(); 
 		double time = endTime - startTime;
-		System.out.println("millisecondi = " + time);
 		double secondi = time / 1000;
-		System.out.println("secondi = " + secondi);
 		double minuti = secondi / 60;
-		System.out.println("minuti = " + minuti);
 		double ore = minuti / 60;
-		System.out.println("ore = " + ore);
+		System.out.println("Everything done in hours: " + ore);
+		//-------------------------------------------------------------------------------------------------------------------------------------
 	}
 
 }

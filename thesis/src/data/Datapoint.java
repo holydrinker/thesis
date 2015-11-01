@@ -30,6 +30,10 @@ public class Datapoint implements Iterable<Double> {
 		this.y = y;
 	}
 	
+	public Datapoint(short pointID) {
+		this.pointID = pointID;
+	}
+	
 	public short getID(){
 		return this.pointID;
 	}

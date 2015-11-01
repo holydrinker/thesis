@@ -13,7 +13,7 @@ public class Tester {
 		
 		//Carico un dataset per il testing del package
 		StreamGenerator sg = new StreamGenerator(filePath);
-		Dataset data = new Dataset(sg.getFeatureVectorTO(), sg.getDataTO());
+		Dataset data = new Dataset(sg.getFeatureVectorTO(), sg.getDataTO(), false);
 		
 		//Stampo il dataset facendo vedere solo la seconda feature, quella che mi interessa, cioè VALUE
 		int featureIdx = 1;

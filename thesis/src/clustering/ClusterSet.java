@@ -49,8 +49,4 @@ public class ClusterSet implements Iterable<Cluster> {
 	public Iterator<Cluster> iterator() {
 		return this.clusters.iterator();
 	}
-	
-	private void writePoint(short clusterId, Datapoint dp){
-		
-	}
 }

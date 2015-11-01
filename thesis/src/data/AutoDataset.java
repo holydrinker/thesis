@@ -38,7 +38,7 @@ public class AutoDataset extends Data {
 		this.datapoints = acDatapoints;
 		
 		//Scaling autocorrelation value
-		//super.scaling();
+		super.scaling();
 		System.out.println("Done! \n");
 	}
 	
