@@ -25,7 +25,7 @@ public class Runner {
 	
 	public static void main(String[] args) {
 		//Start timer
-		double startTime = System.currentTimeMillis(); 
+		double startTime = System.currentTimeMillis();
 		
 		//Console args
 		String fileName = args[0];
@@ -46,7 +46,7 @@ public class Runner {
 		if(pca.equalsIgnoreCase(DO_PCA)){
 			System.out.print(" applying pca...");
 			new PCA(fileName).createTempArff();
-			filePath.replaceAll(fileName, "temp_"+fileName);
+			filePath = filePath.replaceAll(fileName, "temp_"+fileName);
 		} else if(pca.equalsIgnoreCase(DONT_DO_PCA)) {
 			System.out.print("...");
 		} else {
@@ -84,8 +84,8 @@ public class Runner {
 		
 		//...and than generate dataset!
 		Data data = (Data)new DataFactory().getInstance(datasetType, paramsData);
-		System.out.println(data.toString());
 		System.out.println("done!\n");
+		System.out.println(data.toString());
 		//-------------------------------------------------------------------------------------------------------------------------------------		
 		
 		
@@ -101,7 +101,7 @@ public class Runner {
 		
 		//EVALUATION--------------------------------------------------------------------------------------------------------------------------
 		System.out.println("Computing metrics...");
-		MetricsA metrics = new Metrics(data.getGroundTruth(), clusterSet);
+		MetricsA metrics = new Metrics(clusterSet, data.size());
 		
 		System.out.print("purity: ");
 		System.out.println(metrics.purity());

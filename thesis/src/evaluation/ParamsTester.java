@@ -59,14 +59,15 @@ public class ParamsTester {
 		listSet.add(c1);
 		listSet.add(c2);
 		listSet.add(c3);
-		ClusterSet clusterSet = new ClusterSet(listSet);*/
+		ClusterSet clusterSet = new ClusterSet(listSet);
+		*/
 		
-		
+		/*main*/
 		String outputPath = "../output/indianpine_dataset_16_nopca.csv";
 		ClusterSet clusterSet = new ClusterRebuilder(outputPath).compute();
-		System.out.println(dataset.getGroundTruth().size());
 		System.out.println("Computing metrics...");
-		MetricsA metrics = new Metrics (dataset.getGroundTruth(), clusterSet);
+		
+		MetricsA metrics = new Metrics (clusterSet, dataset.size());
 		System.out.print("purity: ");
 		System.out.println(metrics.purity());
 		System.out.print("RI: ");
@@ -78,7 +79,5 @@ public class ParamsTester {
 		double beta = 5;
 		System.out.print("F" + beta + ": ");
 		System.out.println(metrics.fScore(5));
-		
 	}
-
 }

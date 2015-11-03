@@ -8,6 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import autocorrelation.AcFactory;
+import autocorrelation.AutocorrelationI;
+import data.Data;
+import data.DataFactory;
+import exception.DatasetException;
+import exception.PcaException;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -21,6 +27,7 @@ public class PCA {
 	private final String relationName; //doc update
 	private String dir = "dataset/";
 	private ArrayList<Coord> coordList = new ArrayList<Coord>();
+	ArrayList<Integer> classList = new ArrayList<Integer>();
 	
 	public PCA(String fileName, int maxAttributeNames) {
 		this.relationName = fileName;
@@ -43,15 +50,22 @@ public class PCA {
 		//generate new temp input file
 		try {
 			//load dataset and save coordinates
-			dataset = new Instances(new FileReader(dir + fileName)); //qui muore. nè da eccezione nè niente
+			dataset = new Instances(new FileReader(dir + fileName));
 			String coordX_name = dataset.attribute(0).name();
 			String coordY_name = dataset.attribute(1).name();
-			saveCoord(dataset);
+			saveCoordAndClass(dataset);
 			
 			//remove coordinates before performing pca
-			String[] removeOption = {"-R" , "1-2"};
+			String[] coordOptions = {"-R" , "1-2"};
 			Remove remove = new Remove();
-			remove.setOptions(removeOption);
+			remove.setOptions(coordOptions);
+			remove.setInputFormat(dataset);
+			dataset = Filter.useFilter(dataset, remove);
+			
+			//remove class id before performing pca
+			String[] classOptions = {"-R" , "last"};
+			remove = new Remove();
+			remove.setOptions(classOptions);
 			remove.setInputFormat(dataset);
 			dataset = Filter.useFilter(dataset, remove);
 			
@@ -66,7 +80,7 @@ public class PCA {
 			}
 			
 			//restore coordinates
-			restoreCoord(newDataset, coordX_name, coordY_name); 
+			restoreCoordAndClass(newDataset, coordX_name, coordY_name); 
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -88,12 +102,14 @@ public class PCA {
 	 * Save the coordinates into this.map
 	 * @param dataset
 	 */
-	private void saveCoord(Instances dataset){
+	private void saveCoordAndClass(Instances dataset){
 		for(int i = 0; i < dataset.size(); i++){
 			Instance instance = dataset.get(i);
 			double x = instance.value(0);
 			double y = instance.value(1);
+			int classID = ((Double)(instance.value(instance.numAttributes() - 1))).intValue();
 			coordList.add(i, new Coord(x,y));
+			classList.add(i, classID);
 		}
 	}
 	
@@ -103,7 +119,7 @@ public class PCA {
 	 * @param coordX_name
 	 * @param coordY_name
 	 */
-	private void restoreCoord(Instances newDataset, String coordX_name, String coordY_name){
+	private void restoreCoordAndClass(Instances newDataset, String coordX_name, String coordY_name){
 		try {
 			Attribute x = new Attribute(coordX_name);
 			Attribute y = new Attribute(coordY_name);
@@ -113,8 +129,11 @@ public class PCA {
 			int i = 0;
 			for(Instance inst : newDataset){
 				Coord coord = this.coordList.get(i);
+				int classID = this.classList.get(i);
 				inst.setValue(0, coord.x);
 				inst.setValue(1, coord.y);
+				int classIdx = inst.numAttributes()-1;
+				inst.setValue(classIdx, classID);
 				i++;			
 			}
 			
@@ -132,4 +151,5 @@ public class PCA {
 			this.y = y;
 		}
 	}
+	
 }

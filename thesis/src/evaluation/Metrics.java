@@ -4,40 +4,35 @@ import java.util.HashMap;
 
 import clustering.Cluster;
 import clustering.ClusterSet;
-import data.Data;
 import data.Datapoint;
-import data.Feature;
-import data.FeatureVector;
-import data.GroundTruth;
 
 public class Metrics extends MetricsA {
-
-	public Metrics(GroundTruth groundTruthPath, ClusterSet clusterSet) {
-		super(groundTruthPath, clusterSet);
+	
+	public Metrics(ClusterSet clusterSet, int datasetSize) {
+		super(clusterSet, datasetSize);
 	}
 
 	@Override
 	public double purity() {
 		double result = 0d;
-		int count = 0;
+		int clusterCount = 0;
 		PurityQuantifier pq = null;
 		
 		for(Object obj : clusterSet){
 			Cluster cluster = (Cluster) obj ;
-			pq = new PurityQuantifier();
 			
-			for(Object obj1 : cluster){
-				int pointID = ((Datapoint) obj1).getID();
-				int clusterID = groundTruth.getPointClass(pointID);
-				pq.addInstances(clusterID);
+			pq = new PurityQuantifier();			
+			for(Datapoint dp : cluster){
+				short pointID = dp.getID();
+				int classID = groundTruth.getClassID(pointID);
+				pq.addOccurrence(classID);
 			}
 			
-			purityMap.put((int)cluster.getID(), pq);
 			result += pq.quantify();
-			count++;
+			clusterCount++;
 		}
 		
-		return result / count;
+		return result / clusterCount;
 	}
 
 	@Override

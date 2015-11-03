@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import data.Datapoint;
+import evaluation.Metrics;
 import io.DatapointTO;
 
 public class Cluster implements Iterable<Datapoint>{
@@ -12,10 +13,15 @@ public class Cluster implements Iterable<Datapoint>{
 	private Datapoint medoid;
 	private List<Datapoint> datapoints;
 	
-	public Cluster(short id, Datapoint medoid, List<Datapoint> datapoints) {
-		this.id = id;
+	public Cluster(short clusterID, Datapoint medoid, List<Datapoint> datapoints) {
+		this.id = clusterID;
 		this.medoid = medoid;
 		this.datapoints = datapoints;
+		
+		Metrics.groundTruth.setClusterID(medoid.getID(), clusterID);
+		for(Datapoint dp : datapoints){
+			Metrics.groundTruth.setClusterID(dp.getID(), clusterID);
+		}
 	}
 
 	public Datapoint getMedoid(){

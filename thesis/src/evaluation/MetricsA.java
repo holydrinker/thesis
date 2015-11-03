@@ -1,138 +1,63 @@
 package evaluation;
 
-import java.util.HashMap;
-
-import clustering.Cluster;
 import clustering.ClusterSet;
-import data.Data;
-import data.Datapoint;
-import data.GroundTruth;
 
 public abstract class MetricsA {
-	protected GroundTruth groundTruth;
+	public static GroundTruth groundTruth = new GroundTruth();
 	protected ClusterSet clusterSet;
-	
-	protected HashMap<Integer, PurityQuantifier> purityMap = new HashMap<Integer, PurityQuantifier>(); 
 	
 	protected int TP;
 	protected int FP;
 	protected int TN;
 	protected int FN;
-	
-	protected final int GT_X = 0;
-	protected final int GT_Y = 1;
-	protected final int RES_X = 2;
-	protected final int RES_Y = 3;
-	
-	public MetricsA(GroundTruth groundTruth, ClusterSet clusterSet) {
-		this.groundTruth = groundTruth;
+	private String TP_KEY = "TP";
+	private String TN_KEY = "TN";
+	private String FP_KEY = "FP";
+	private String FN_KEY = "FN";
+
+	public MetricsA(ClusterSet clusterSet, int datasetSize) {
 		this.clusterSet = clusterSet;
-		System.out.print("set params..."); //
-		setParams();
-		System.out.println("done");
+		setParams(datasetSize);
 	}
 	
-	public void setParams(){
+	public void setParams(int datasetSize){
 		// Start
-		double dp1Class = 0d;
-		double dp2Class = 0d;
-		double cp1Class = 0d;
-		double cp2Class = 0d;
-		PrettyMap pmap = new PrettyMap();
-
-		int count = 0;
+		short dp1Class = 0;
+		short dp2Class = 0;
+		short cp1Class = 0;
+		short cp2Class = 0;
+		SimplyMetricsMap map = new SimplyMetricsMap();
 		
-		for (Integer id1 : groundTruth) {
-			dp1Class = groundTruth.getPointClass(id1);
-			for (Integer id2 : groundTruth) {
-				dp2Class = groundTruth.getPointClass(id2);
+		for(short i = 0; i < datasetSize; i++){
+			dp1Class = groundTruth.getClassID(i);
+			cp1Class = groundTruth.getClusterID(i);
+			
+			for(short j = (short) (i+1); j < datasetSize; j++){
+				dp2Class = groundTruth.getClassID(j);
+				cp2Class = groundTruth.getClusterID(j);
 				
-				count++;
-				int mln = 0;
-
-				if (id1 != id2) {
-					for (Cluster cluster : clusterSet) {
-						double pClass = cluster.getID();
-
-						for (Datapoint p : cluster) {
-							if (p.getID() == id1) {
-								cp1Class = pClass;
-							} else if (p.getID() == id2) {
-								cp2Class = pClass;
-							}
-						}
+				// Update
+				if (dp1Class == dp2Class) {
+					if (cp1Class == cp2Class) {
+						map.add(TP_KEY);
+					} else {
+						map.add(FN_KEY);
 					}
-
-					// Update
-					if (dp1Class == dp2Class) {
-						if (cp1Class == cp2Class) {
-							pmap.addPair(new Pair(id1, id2), "TP");
-						} else {
-							pmap.addPair(new Pair(id1, id2), "FN");
-						}
-					} else if (dp1Class != dp2Class) {
-						if (cp1Class != cp2Class) {
-							pmap.addPair(new Pair(id1, id2), "TN");
-						} else {
-							pmap.addPair(new Pair(id1, id2), "FP");
-						}
+				} else if (dp1Class != dp2Class) {
+					if (cp1Class != cp2Class) {
+						map.add(TN_KEY);
+					} else {
+						map.add(FP_KEY);
 					}
-					if(count >1000000){
-						System.out.println("mln: " + (mln++) );
-						count = 0;
-					}
-				}
-			}
-		}
-
-		HashMap<String, Integer> result = pmap.count();
-		this.TP = result.get("TP");
-		this.TN = result.get("TN");
-		this.FP = result.get("FP");
-		this.FN = result.get("FN");
-		System.out.println(result.toString());
-	}
-	
-	/**
-	 * Quantify the purity into a cluster.
-	 */
-	protected class PurityQuantifier{
-		private HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-		private int count = 0;
-		
-		public void addInstances(int clusterID){
-			if(map.containsKey(clusterID)){
-				int occurrences = map.get(clusterID);
-				map.remove(clusterID);
-				map.put(clusterID, (occurrences+1));
-			} else {
-				map.put(clusterID, 1);
-			}
-			count++;
+				}	
+			}	
 		}
 		
-		public double quantify(){
-			int maxOccurrences = -1;
-			
-			for(Integer clusterID : map.keySet()){
-				int occurrences = map.get(clusterID); 
-				if(occurrences > maxOccurrences){
-					maxOccurrences = occurrences;
-				}
-			}
-			return ((double)maxOccurrences) / count;
-		}
-		
-		public int getMax(){
-			int maxOccurrences = -1;
-			
-			for(Integer clusterID : map.keySet()){
-				int occurrences = map.get(clusterID);
-				if(occurrences > maxOccurrences)
-					maxOccurrences = occurrences;
-			}
-			return maxOccurrences;
-		}
+		System.out.println(map.toString());
+		this.TP = map.get(TP_KEY);
+		this.TN = map.get(TN_KEY);
+		this.FP = map.get(FP_KEY);
+		this.FN = map.get(FN_KEY);
 	}
 	
 	public abstract double purity();

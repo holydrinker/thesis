@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import evaluation.Metrics;
 import io.DataTO;
 import io.DatapointTO;
 import io.FeatureVectorTO;
@@ -12,7 +13,6 @@ public abstract class Data implements Iterable<Datapoint> {
 	protected FeatureVector fv;
 	protected Datapoint[][] datapoints;
 	protected short size = 0;
-	private GroundTruth groundTruth = new GroundTruth();
 	
 	public Data(FeatureVectorTO fvTO, DataTO stream) {
 		fv = new FeatureVector(fvTO);
@@ -37,7 +37,7 @@ public abstract class Data implements Iterable<Datapoint> {
 		}
 		datapoints = new Datapoint[height+1][width+1];
 		
-		//POPULATE MATRIX (and populate the ground truth in background)
+		//POPULATE MATRIX
 		short id = 0;
 		final int X = 0;
 		final int Y = 1;
@@ -45,16 +45,14 @@ public abstract class Data implements Iterable<Datapoint> {
 		for(Object obj : stream.get()){
 			DatapointTO dpTO = (DatapointTO) obj;
 			LinkedList<Object> params = dpTO.get();
-			int lastFeatureIdx = params.size() - 1;
 			
 			int x = ((Double)params.get(X)).intValue() - 1;
 			int y = ((Double)params.get(Y)).intValue() - 1;
-			int classId = ((Double) params.get(lastFeatureIdx)).intValue();
+			short classID = (short) ((Double)params.removeLast()).intValue();
 			
-			//Ignore the last attribute (the class attribute). We save it in the ground truth for the evaluation phase
-			params.remove(lastFeatureIdx);
-			groundTruth.put(id, classId);
 			Datapoint dp = new Datapoint(id, new DatapointTO(params));
+			dp.setClass(classID);
+			Metrics.groundTruth.addRecord(id, classID);
 			id++;
 			
 			fv.updateMinMax(dp);
@@ -81,10 +79,6 @@ public abstract class Data implements Iterable<Datapoint> {
 	
 	public Datapoint getDatapoint(short row, short col){
 		return this.datapoints[row][col];
-	}
-	
-	public GroundTruth getGroundTruth(){
-		return this.groundTruth;
 	}
 	
 	/**

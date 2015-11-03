@@ -9,12 +9,13 @@ public class Datapoint implements Iterable<Double> {
 	private short pointID;
 	public short x;
 	public short y;
+	public short classID;
 	private LinkedList<Double> values = new LinkedList<Double>(); 
 	
 	Datapoint(short pointID, DatapointTO to){
 		this.pointID = pointID;
 		LinkedList<Object> params = to.get();
-		
+
 		final int X_POS = 0;
 		final int Y_POS = 1;
 		final int FIRST_VALUE_POS = 2;
@@ -50,6 +51,10 @@ public class Datapoint implements Iterable<Double> {
 		this.values.add(value);
 	}
 
+	public void setClass(short classID){
+		this.classID = classID;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		Datapoint dp = (Datapoint) obj;

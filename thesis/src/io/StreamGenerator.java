@@ -59,17 +59,19 @@ public class StreamGenerator {
 					line = br.readLine();
 					
 					while(line != null){
-						splittedLine = line.split(",");
-						LinkedList<Object> dpParams = new LinkedList<Object>();
-						
-						for(String s : splittedLine){
-							dpParams.add(Double.parseDouble(s));
+						if(!line.equalsIgnoreCase("")){
+							splittedLine = line.split(",");
+							LinkedList<Object> dpParams = new LinkedList<Object>();
+							
+							for(String s : splittedLine){
+								dpParams.add(Double.parseDouble(s));
+							}
+							dataParams.add(new DatapointTO(dpParams));
 						}
-						dataParams.add(new DatapointTO(dpParams));
 						line = br.readLine();
 					}
 					
-				} else if(firstWord.equalsIgnoreCase("@relation")){
+				} else if(firstWord.equalsIgnoreCase("@relation") || firstWord.equalsIgnoreCase("")){
 					line = br.readLine();
 					
 				} else {

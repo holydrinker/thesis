@@ -9,8 +9,14 @@ public class FeatureVector implements Iterable<Feature>{
 	public LinkedList<Feature> features = new LinkedList<Feature>();
 	
 	public FeatureVector(FeatureVectorTO to) {
+		LinkedList<Object> params = to.get();
+		for(int i = 0; i < params.size()-1; i++){
+			features.add((Feature)params.get(i));
+		}
+		/*
 		for(Object obj : to.get())
 			features.add((Feature)obj);
+			*/
 	}
 	
 	public Feature getFeature(int idx){
