@@ -63,7 +63,7 @@ public class ParamsTester {
 		*/
 		
 		/*main*/
-		String outputPath = "../output/indianpine_dataset_16_nopca.csv";
+		String outputPath = "../output/indianpine_auto_16_pca.csv";
 		ClusterSet clusterSet = new ClusterRebuilder(outputPath).compute();
 		System.out.println("Computing metrics...");
 		
