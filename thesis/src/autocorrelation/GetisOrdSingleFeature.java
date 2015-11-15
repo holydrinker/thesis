@@ -41,8 +41,8 @@ public class GetisOrdSingleFeature {
 		
 		for(Object neighbour : neighborhood){
 			Datapoint j = (Datapoint) neighbour;
-			short dpX = j.x;
-			short dpY = j.y;
+			short dpX = j.getX();
+			short dpY = j.getY();
 			
 			double zj = j.getValue(featureIdx);
 			double lij = weight.compute(x, y, dpX, dpY);
@@ -99,7 +99,7 @@ public class GetisOrdSingleFeature {
 		
 		for(Object obj : neighborhood){
 			Datapoint neighbour = (Datapoint)obj;
-			sum +=  weight.compute(x, y, neighbour.x, neighbour.y);
+			sum +=  weight.compute(x, y, neighbour.getX(), neighbour.getY());
 		}
 		return sum;
 	}

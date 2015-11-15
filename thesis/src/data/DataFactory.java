@@ -6,7 +6,6 @@ import autocorrelation.AutocorrelationI;
 
 import java.util.List;
 
-
 public class DataFactory implements Factory {
 	private static final String DATASET = "dataset";
 	private static final String AUTO_DATASET = "auto";

@@ -1,42 +1,50 @@
 package evaluation;
 
 import clustering.ClusterSet;
+import data.Data;
+import data.Datapoint;
 
 public abstract class MetricsA {
-	public static GroundTruth groundTruth = new GroundTruth();
 	protected ClusterSet clusterSet;
+	protected ClusterAssignment assignm = new ClusterAssignment();
 	
 	protected int TP;
 	protected int FP;
 	protected int TN;
 	protected int FN;
-	private String TP_KEY = "TP";
-	private String TN_KEY = "TN";
-	private String FP_KEY = "FP";
-	private String FN_KEY = "FN";
+	private final String TP_KEY = "TP";
+	private final String TN_KEY = "TN";
+	private final String FP_KEY = "FP";
+	private final String FN_KEY = "FN";
 
-	public MetricsA(ClusterSet clusterSet, int datasetSize) {
+	public MetricsA(ClusterSet clusterSet, Data data) {
 		this.clusterSet = clusterSet;
-		setParams(datasetSize);
+		setParams(data);
 	}
 	
-	public void setParams(int datasetSize){
-		// Start
+	public void setParams(Data data){
+		// Generate cluster assignment
+		for(Datapoint datapoint : data){
+			assignm.addRecord(datapoint.getID(), datapoint.getClassID(), datapoint.getClusterID());
+		}
+		
+		// Start count
+		MetricsMap map = new MetricsMap();
 		short dp1Class = 0;
 		short dp2Class = 0;
 		short cp1Class = 0;
 		short cp2Class = 0;
-		SimplyMetricsMap map = new SimplyMetricsMap();
+		short dataSize = data.size();
 		
-		for(short i = 0; i < datasetSize; i++){
-			dp1Class = groundTruth.getClassID(i);
-			cp1Class = groundTruth.getClusterID(i);
+		for(short i = 0; i < dataSize; i++){
+			dp1Class = assignm.getClassID(i);
+			cp1Class = assignm.getClusterID(i);
 			
-			for(short j = (short) (i+1); j < datasetSize; j++){
-				dp2Class = groundTruth.getClassID(j);
-				cp2Class = groundTruth.getClusterID(j);
+			for(short j = (short) (i+1); j < dataSize; j++){
+				dp2Class = assignm.getClassID(j);
+				cp2Class = assignm.getClusterID(j);
 				
-				// Update
+				// Update MetricsMap
 				if (dp1Class == dp2Class) {
 					if (cp1Class == cp2Class) {
 						map.add(TP_KEY);

@@ -6,15 +6,6 @@ import io.DataTO;
 import io.FeatureVectorTO;
 
 public class AutoDataset extends Data {
-	/*
-	 * La classe è stata completamente riscritta dopo il ricevimento del 31 luglio.
-	 * Non vengono più generati nuovi transfer object come avevo fatto io, bensì viene creata una matrice nuova, 
-	 * delle stesse dimensioni del dataset, vuota. Viene popolata generando nuovi datapoint con l'autocorrelazione.
-	 * 
-	 * Cosa aggiunte:
-	 * - Costruttore nella classe data, perchè qui ho bisogno di generare un Dataset passando solo il feature vector.
-	 */
-	
 	public AutoDataset(FeatureVectorTO fvTO, DataTO stream, AutocorrelationI ac, short radius) {
 		super(fvTO, stream);
 		

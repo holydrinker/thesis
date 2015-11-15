@@ -29,7 +29,7 @@ public class Runner {
 		
 		//Console args
 		String fileName = args[0];
-		String filePath = "dataset/"+ fileName + ".arff";
+		String filePath = "../dataset/"+ fileName + ".arff";
 		String datasetType = args[1]; //auto - dataset
 		String autocorrelationType = null;
 		String radius = null;
@@ -41,7 +41,6 @@ public class Runner {
 		System.out.print("loading data");
 		
 		//Set the stream generator based on pca option
-		//Sostituire con un altro factory
 		StreamGenerator sg = null;
 		if(pca.equalsIgnoreCase(DO_PCA)){
 			System.out.print(" applying pca...");
@@ -52,10 +51,9 @@ public class Runner {
 		} else {
 			throw new PcaException();
 		}
-		
 		sg = new StreamGenerator(filePath);
 		
-		//Build transfer obejcts
+		//Build transfer obejcts from stream generator
 		FeatureVectorTO fvTO = sg.getFeatureVectorTO();
 		DataTO dataTO = sg.getDataTO();
 		
@@ -85,7 +83,6 @@ public class Runner {
 		//...and than generate dataset!
 		Data data = (Data)new DataFactory().getInstance(datasetType, paramsData);
 		System.out.println("done!\n");
-		System.out.println(data.toString());
 		//-------------------------------------------------------------------------------------------------------------------------------------		
 		
 		
@@ -101,7 +98,7 @@ public class Runner {
 		
 		//EVALUATION--------------------------------------------------------------------------------------------------------------------------
 		System.out.println("Computing metrics...");
-		MetricsA metrics = new Metrics(clusterSet, data.size());
+		MetricsA metrics = new Metrics(clusterSet, data);
 		
 		System.out.print("purity: ");
 		System.out.println(metrics.purity());

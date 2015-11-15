@@ -38,7 +38,7 @@ public abstract class Data implements Iterable<Datapoint> {
 		datapoints = new Datapoint[height+1][width+1];
 		
 		//POPULATE MATRIX
-		short id = 0;
+		short pointID = 0;
 		final int X = 0;
 		final int Y = 1;
 		
@@ -48,12 +48,10 @@ public abstract class Data implements Iterable<Datapoint> {
 			
 			int x = ((Double)params.get(X)).intValue() - 1;
 			int y = ((Double)params.get(Y)).intValue() - 1;
-			short classID = (short) ((Double)params.removeLast()).intValue();
+			short classID = (short) ((Double) params.removeLast()).intValue();
 			
-			Datapoint dp = new Datapoint(id, new DatapointTO(params));
+			Datapoint dp = new Datapoint(pointID++, new DatapointTO(params));
 			dp.setClass(classID);
-			Metrics.groundTruth.addRecord(id, classID);
-			id++;
 			
 			fv.updateMinMax(dp);
 			datapoints[x][y] = dp;
@@ -79,6 +77,15 @@ public abstract class Data implements Iterable<Datapoint> {
 	
 	public Datapoint getDatapoint(short row, short col){
 		return this.datapoints[row][col];
+	}
+	
+	public Datapoint getDatapoint(short id){
+		for(Datapoint datapoint : this){
+			if(datapoint.getID() == id){
+				return datapoint;
+			}
+		}
+		return null;
 	}
 	
 	/**

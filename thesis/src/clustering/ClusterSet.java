@@ -49,4 +49,13 @@ public class ClusterSet implements Iterable<Cluster> {
 	public Iterator<Cluster> iterator() {
 		return this.clusters.iterator();
 	}
+	
+	@Override
+	public String toString() {
+		String result = "[ ";
+		for(Cluster cluster : this.clusters){
+			result += cluster.getID() + " ";
+		}
+		return result += "]";
+	}
 }

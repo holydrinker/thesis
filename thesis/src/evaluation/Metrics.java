@@ -1,15 +1,14 @@
 package evaluation;
 
-import java.util.HashMap;
-
 import clustering.Cluster;
 import clustering.ClusterSet;
+import data.Data;
 import data.Datapoint;
 
 public class Metrics extends MetricsA {
 	
-	public Metrics(ClusterSet clusterSet, int datasetSize) {
-		super(clusterSet, datasetSize);
+	public Metrics(ClusterSet clusterSet, Data data) {
+		super(clusterSet, data);
 	}
 
 	@Override
@@ -24,7 +23,7 @@ public class Metrics extends MetricsA {
 			pq = new PurityQuantifier();			
 			for(Datapoint dp : cluster){
 				short pointID = dp.getID();
-				int classID = groundTruth.getClassID(pointID);
+				int classID = assignm.getClassID(pointID);
 				pq.addOccurrence(classID);
 			}
 			

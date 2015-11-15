@@ -5,15 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
 
-import autocorrelation.AcFactory;
-import autocorrelation.AutocorrelationI;
-import data.Data;
-import data.DataFactory;
-import exception.DatasetException;
-import exception.PcaException;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -25,7 +17,7 @@ public class PCA {
 	private PrincipalComponents pca = new PrincipalComponents();
 	private String fileName;
 	private final String relationName; //doc update
-	private String dir = "dataset/";
+	private String dir = "..dataset/";
 	private ArrayList<Coord> coordList = new ArrayList<Coord>();
 	ArrayList<Integer> classList = new ArrayList<Integer>();
 	
@@ -69,7 +61,10 @@ public class PCA {
 			remove.setInputFormat(dataset);
 			dataset = Filter.useFilter(dataset, remove);
 			
+			pca.setCenterData(true);
+			pca.setVarianceCovered(0.99);
 			pca.setInputFormat(dataset);
+			pca.setOptions("-R 0.99 -A 5 -M -1 -C".split(" "));
 			newDataset = Filter.useFilter(dataset, pca);
 			
 			//Renaming

@@ -1,7 +1,6 @@
 package evaluation;
 
 import data.Dataset;
-import data.GroundTruth;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,10 +14,10 @@ public class ParamsTester {
 
 	public static void main(String[] args) {
 		//Dataset
-		StreamGenerator sg = new StreamGenerator("../dataset/indianpine.arff");
+		StreamGenerator sg = new StreamGenerator("../dataset/evaluation.arff");
 		Dataset dataset = new Dataset(sg.getFeatureVectorTO(), sg.getDataTO(), true);
 		
-		/*ClusterSet
+		/*ClusterSet*/
 		LinkedList<Datapoint> listC1 = new LinkedList<Datapoint>();
 		LinkedList<Datapoint> listC2 = new LinkedList<Datapoint>();
 		LinkedList<Datapoint> listC3 = new LinkedList<Datapoint>();
@@ -60,14 +59,14 @@ public class ParamsTester {
 		listSet.add(c2);
 		listSet.add(c3);
 		ClusterSet clusterSet = new ClusterSet(listSet);
-		*/
 		
-		/*main*/
+		
+		/*main
 		String outputPath = "../output/indianpine_auto_16_pca.csv";
 		ClusterSet clusterSet = new ClusterRebuilder(outputPath).compute();
-		System.out.println("Computing metrics...");
+		System.out.println("Computing metrics...");*/
 		
-		MetricsA metrics = new Metrics (clusterSet, dataset.size());
+		MetricsA metrics = new Metrics (clusterSet, dataset);
 		System.out.print("purity: ");
 		System.out.println(metrics.purity());
 		System.out.print("RI: ");
@@ -76,8 +75,8 @@ public class ParamsTester {
 		System.out.println(metrics.precision());
 		System.out.print("R: ");
 		System.out.println(metrics.recall());
-		double beta = 5;
+		double beta = 1;
 		System.out.print("F" + beta + ": ");
-		System.out.println(metrics.fScore(5));
+		System.out.println(metrics.fScore(beta));
 	}
 }
