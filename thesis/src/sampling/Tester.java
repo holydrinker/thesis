@@ -12,14 +12,21 @@ import data.Datapoint;
 public class Tester {
 
 	public static void main(String[] args) {
-		Cluster cluster = generateCluster();
+		//Cluster cluster = generateCluster();
+		Cluster reCluster = new ClusterRebuilder().compute();
 		Set<Cluster> set = new HashSet<Cluster>();
-		set.add(cluster);
+		//set.add(cluster);
+		set.add(reCluster);
 		ClusterSet clusterSet = new ClusterSet(set);
+		
+		//System.out.println("cluster size: " + reCluster.size());
 		
 		Sampling sampler = new Sampling(0.5, clusterSet);
 		ClusterSet sampledClusterSet = sampler.compute();
-		System.out.println(sampledClusterSet.iterator().next().size());
+		Cluster sampledCluster = sampledClusterSet.iterator().next();
+		//System.out.println("sampledCluster size: " + sampledCluster.size());
+		
+		
 	}
 	
 	private static Cluster generateCluster(){

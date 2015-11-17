@@ -11,7 +11,7 @@ import clustering.Cluster;
 import data.Datapoint;
 
 public class QuadTreeDecomposer extends Decomposer {
-	static int idCode = 0;
+	private static int idCode = 0;
 	
 	private class QUADTREESplit implements Comparable<QUADTREESplit>{
 		int beginExampleIndex;
@@ -62,21 +62,21 @@ public class QuadTreeDecomposer extends Decomposer {
 		if(perc<1.0f){
 			numCentroids+=1;
 		}
-
+		
 		Map<Integer, Set<QUADTREESplit>> quadList = new HashMap<Integer, Set<QUADTREESplit>>();
 		Set<QUADTREESplit> set = new TreeSet<QUADTREESplit>();
 		set.add(new QUADTREESplit(mbrData, beginExampleIndex, endExampleIndex, mbr, 0, -1));
 		quadList.put(0, set);
 
-		populateQUADTREE(cluster, mbr, centroid, quadList, numCentroids);
+		populateQUADTREE(cluster, centroid, quadList, numCentroids);
 
 		return centroid;
 	}
 	
-	private void populateQUADTREE(Cluster cluster, MBR mbrStart, List<Datapoint> centroid, Map<Integer,Set<QUADTREESplit>> quad, int numCentroids){
+	private void populateQUADTREE(Cluster cluster, List<Datapoint> centroid, Map<Integer,Set<QUADTREESplit>> quad, int numCentroids){
 		int first = 0;
-	
-		while( centroid.size() + quad.get(first).size() < numCentroids ){
+
+		while( centroid.size() + quad.get(first).size() < numCentroids ){			
 			if(first > 0 && quad.get(first).size() == quad.get(first-1).size())
 				break;
 						
@@ -239,9 +239,7 @@ public class QuadTreeDecomposer extends Decomposer {
 						quad.get(first+1).add(sp);
 						currentQuad.children.add(sp);
 					}
-					if(q2)
-						{
-					
+					if(q2){
 						QUADTREESplit sp=(new QUADTREESplit(mbrData2, splitY2+1, endExampleIndex,mbr2,currentDepth+1,currentQuad.id));
 						quad.get(first+1).add(sp);
 						currentQuad.children.add(sp);

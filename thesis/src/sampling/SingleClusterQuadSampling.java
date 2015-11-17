@@ -6,11 +6,10 @@ import clustering.Cluster;
 import data.Datapoint;
 
 public class SingleClusterQuadSampling extends SingleClusterSampling{
-	private final double perc;
 	private Decomposer decomposer;
 	
-	public SingleClusterQuadSampling(double perc) {
-		this.perc = perc;
+	SingleClusterQuadSampling(double perc) {
+		super(perc);
 		decomposer = new QuadTreeDecomposer();
 	}
 	

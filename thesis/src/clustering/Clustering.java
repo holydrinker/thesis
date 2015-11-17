@@ -22,4 +22,8 @@ public abstract class Clustering {
 	public ClusterSet getClusterSet(){
 		return this.clusterSet;
 	}
+	
+	public void setClusterSet(ClusterSet clusterSet){
+		this.clusterSet = clusterSet;
+	}
 }

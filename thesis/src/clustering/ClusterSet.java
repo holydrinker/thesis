@@ -44,7 +44,7 @@ public class ClusterSet implements Iterable<Cluster> {
 			e.printStackTrace();
 		}
 	}
-
+	
 	@Override
 	public Iterator<Cluster> iterator() {
 		return this.clusters.iterator();
@@ -58,4 +58,6 @@ public class ClusterSet implements Iterable<Cluster> {
 		}
 		return result += "]";
 	}
+	
+	
 }

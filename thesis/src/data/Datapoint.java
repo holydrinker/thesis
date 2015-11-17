@@ -14,7 +14,7 @@ public class Datapoint implements Iterable<Double>, Comparable<Datapoint> {
 	private List<SpatialFeature> spatialFeatures = new ArrayList<SpatialFeature>();
 	private LinkedList<Double> values = new LinkedList<Double>(); 
 	
-	Datapoint(short pointID, DatapointTO to){
+	public Datapoint(short pointID, DatapointTO to){
 		this.pointID = pointID;
 		LinkedList<Object> params = to.get();
 

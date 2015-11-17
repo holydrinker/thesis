@@ -4,6 +4,7 @@ import clustering.ClusterSet;
 import clustering.Cluster;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class Sampling {
 	private ClusterSet clusterSet;
@@ -15,10 +16,12 @@ public class Sampling {
 	}
 	
 	public ClusterSet compute(){
-		HashSet<Cluster> newClusterList = new HashSet<Cluster>();
+		Set<Cluster> newClusterList = new HashSet<Cluster>();
 		for(Cluster cluster : clusterSet){
+			System.out.println("size pre sampling: " + cluster.size());
 			Cluster newCluster = scs.compute(cluster);
 			newClusterList.add(newCluster);
+			System.out.println("size post sampling: " + newCluster.size());
 		}
 		
 		return new ClusterSet(newClusterList);

@@ -10,12 +10,14 @@ import data.Data;
 import data.DataFactory;
 import evaluation.Metrics;
 import evaluation.MetricsA;
+import evaluation.SamplingMetrics;
 import exception.DatasetException;
 import exception.PcaException;
 import io.DataTO;
 import io.FeatureVectorTO;
 import io.PCA;
 import io.StreamGenerator;
+import sampling.Sampling;
 
 public class Runner {
 	static final String DATASET = "dataset";
@@ -29,13 +31,14 @@ public class Runner {
 		
 		//Console args
 		String fileName = args[0];
-		String filePath = "../dataset/"+ fileName + ".arff";
+		String filePath = "dataset/"+ fileName + ".arff";
 		String datasetType = args[1]; //auto - dataset
 		String autocorrelationType = null;
 		String radius = null;
 		String q = null;
 		String centroidsNumber = args[2]; //numero di centroidi
 		String pca = args[3]; 
+		Double samplingPerc = Double.parseDouble(args[4]); //if >= 1, do not sample
 		
 		System.out.println("START");
 		System.out.print("loading data");
@@ -60,9 +63,9 @@ public class Runner {
 		//Build autocorrelation (optional) 
 		AutocorrelationI ac = null;
 		if(datasetType.equalsIgnoreCase(AUTO_DATASET)){
-			autocorrelationType = args[4]; //GO to use GetisOrd
-			radius = args[5];
-			q = args[6];
+			autocorrelationType = args[5]; //GO to use GetisOrd
+			radius = args[6];
+			q = args[7];
 			
 			//wrap args to call factory for Autocorrelation
 			ArrayList<Object> paramsAc = new ArrayList<Object>();
@@ -112,25 +115,50 @@ public class Runner {
 		System.out.print("recall: ");
 		System.out.println(metrics.recall());
 		
-		double beta = 5;
+		double beta = 1;
 		System.out.print("F" + beta + " score: ");
-		System.out.println(metrics.fScore(5));
+		System.out.println(metrics.fScore(beta));
 		
 		//-------------------------------------------------------------------------------------------------------------------------------------
 		
 		
 		//SAMPLING-----------------------------------------------------------------------------------------------------------------------------
-		
+		if(samplingPerc < 1d){
+			System.out.println("Sampling...");
+			
+			ClusterSet sampledSet = new Sampling(samplingPerc, clusterSet).compute();
+			PAM.setClusterSet(sampledSet);
+			csvName = args[0] + "_" + args[1] + "_" + args[2] + "_" + args[3] + "_sampling"+samplingPerc;
+			PAM.exportCsv(csvName);
+			System.out.println("Recomputing metrics...");
+			metrics = new SamplingMetrics(sampledSet, data);
+			
+			System.out.print("purity: ");
+			System.out.println(metrics.purity());
+			
+			System.out.print("rand index: ");
+			System.out.println(metrics.randIndex());
+			
+			System.out.print("precision: ");
+			System.out.println(metrics.precision());
+			
+			System.out.print("recall: ");
+			System.out.println(metrics.recall());
+			
+			beta = 1d;
+			System.out.print("F" + beta + " score: ");
+			System.out.println(metrics.fScore(beta));	
+		}
 		//-------------------------------------------------------------------------------------------------------------------------------------
 		
 		
 		//END----------------------------------------------------------------------------------------------------------------------------------
 		double endTime = System.currentTimeMillis(); 
 		double time = endTime - startTime;
-		double secondi = time / 1000;
-		double minuti = secondi / 60;
-		double ore = minuti / 60;
-		System.out.println("Everything done in hours: " + ore);
+		double sec = time / 1000;
+		double min = sec / 60;
+		double hours = min / 60;
+		System.out.println("Everything done in hours: " + hours);
 		//-------------------------------------------------------------------------------------------------------------------------------------
 	}
 

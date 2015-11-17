@@ -15,9 +15,10 @@ public class MBR extends Quadrant {
 		this.maxX = maxX;
 		this.minY = minY;
 		this.maxY = maxY;
+		this.cardinality = cardinality;
 	}
 
-	public short getMinX(){
+	short getMinX(){ 
 		return this.minX;
 	}
 	
@@ -30,7 +31,7 @@ public class MBR extends Quadrant {
 	}
 	
 	short getMaxY(){
-		return this.maxX;
+		return this.maxY;
 	}
 	
 	short getCardinality(){
@@ -45,7 +46,7 @@ public class MBR extends Quadrant {
 		return ((double)(maxY - minY)) / 2;
 	}
 
-	public Datapoint determineCentre(Cluster cluster, int beginExampleIndex, int endExampleIndex){
+	Datapoint determineCentre(Cluster cluster, int beginExampleIndex, int endExampleIndex){
 		//the sensor point closest to the geometrical centre of the mbr
 		Datapoint centre = cluster.getDatapoint(beginExampleIndex);
 		double cX = (minX + maxX) / 2;

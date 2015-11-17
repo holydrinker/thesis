@@ -66,7 +66,7 @@ public class ParamsTester {
 		ClusterSet clusterSet = new ClusterRebuilder(outputPath).compute();
 		System.out.println("Computing metrics...");*/
 		
-		MetricsA metrics = new Metrics (clusterSet, dataset);
+		MetricsA metrics = new SamplingMetrics (clusterSet, dataset);
 		System.out.print("purity: ");
 		System.out.println(metrics.purity());
 		System.out.print("RI: ");

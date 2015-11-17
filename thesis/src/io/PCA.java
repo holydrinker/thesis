@@ -17,7 +17,7 @@ public class PCA {
 	private PrincipalComponents pca = new PrincipalComponents();
 	private String fileName;
 	private final String relationName; //doc update
-	private String dir = "..dataset/";
+	private String dir = "dataset/";
 	private ArrayList<Coord> coordList = new ArrayList<Coord>();
 	ArrayList<Integer> classList = new ArrayList<Integer>();
 	
