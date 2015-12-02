@@ -1,5 +1,7 @@
 package sampling;
 
+
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,10 +10,12 @@ import java.util.List;
 
 import clustering.Cluster;
 import data.Datapoint;
+import data.FeatureVector;
 import io.DatapointTO;
 
 public class ClusterRebuilder {
-
+	private FeatureVector fv;
+	
 	public Cluster compute(){
 		Cluster cluster = null;
 		
@@ -48,6 +52,7 @@ public class ClusterRebuilder {
 			}
 			
 			br.close();
+			System.out.println(oldClusterID);
 			cluster = new Cluster((short) oldClusterID, null, list);
 			
 		} catch (IOException e) {
@@ -55,6 +60,10 @@ public class ClusterRebuilder {
 		}
 		
 		return cluster;
+	}
+	
+	public FeatureVector getFeatureVector(){
+		return this.fv;
 	}
 	
 }

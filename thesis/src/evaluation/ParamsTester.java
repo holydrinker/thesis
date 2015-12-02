@@ -28,23 +28,17 @@ public class ParamsTester {
 		for(Datapoint dp : dataset){
 			int id = dp.getID();
 			
-			if(id == 0)
-				medoid1 = dp;
-			else if(id > 0 && id <= 4)
+			if(id >= 0 && id <= 4)
 				listC1.add(dp);
 			else if (id == 5)
 				listC2.add(dp);
 			else if (id == 6 || id == 7)
 				listC3.add(dp);
-			else if (id == 8)
-				medoid2 = dp;
-			else if (id > 8 && id <= 11)
+			else if (id >= 8 && id <= 11)
 				listC2.add(dp);
 			else if (id == 12)
 				listC1.add(dp);
-			else if (id == 13)
-				medoid3 = dp;
-			else if(id > 13 && id <= 15)
+			else if(id >= 13 && id <= 15)
 				listC3.add(dp);
 			else if (id == 16)
 				listC2.add(dp);
@@ -60,13 +54,12 @@ public class ParamsTester {
 		listSet.add(c3);
 		ClusterSet clusterSet = new ClusterSet(listSet);
 		
-		
 		/*main
 		String outputPath = "../output/indianpine_auto_16_pca.csv";
 		ClusterSet clusterSet = new ClusterRebuilder(outputPath).compute();
 		System.out.println("Computing metrics...");*/
 		
-		MetricsA metrics = new SamplingMetrics (clusterSet, dataset);
+		MetricsA metrics = new Metrics (clusterSet, dataset);
 		System.out.print("purity: ");
 		System.out.println(metrics.purity());
 		System.out.print("RI: ");

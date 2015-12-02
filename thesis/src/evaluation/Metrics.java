@@ -11,31 +11,31 @@ public class Metrics extends MetricsA {
 
 	@Override
 	protected void setParams(Data data) {
-		// Start count
 		MetricsMap map = new MetricsMap();
-		short dp1Class = 0;
-		short dp2Class = 0;
-		short cp1Class = 0;
-		short cp2Class = 0;
+		short p1Class = 0;
+		short p2Class = 0;
+		short p1Cluster = 0;
+		short p2Cluster = 0;
 		short dataSize = data.size();
 
+		//Optimized loop
 		for (short i = 0; i < dataSize; i++) {
-			dp1Class = assignm.getClassID(i);
-			cp1Class = assignm.getClusterID(i);
-
+			p1Class = assignm.getClassID(i);
+			p1Cluster = assignm.getClusterID(i);
+			
 			for (short j = (short) (i + 1); j < dataSize; j++) {
-				dp2Class = assignm.getClassID(j);
-				cp2Class = assignm.getClusterID(j);
+				p2Class = assignm.getClassID(j);
+				p2Cluster = assignm.getClusterID(j);
 
 				// Update MetricsMap
-				if (dp1Class == dp2Class) {
-					if (cp1Class == cp2Class) {
+				if (p1Class == p2Class) {
+					if (p1Cluster == p2Cluster) {
 						map.add(TP_KEY);
 					} else {
 						map.add(FN_KEY);
 					}
-				} else if (dp1Class != dp2Class) {
-					if (cp1Class != cp2Class) {
+				} else if (p1Class != p2Class) {
+					if (p1Cluster != p2Cluster) {
 						map.add(TN_KEY);
 					} else {
 						map.add(FP_KEY);

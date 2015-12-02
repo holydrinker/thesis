@@ -10,7 +10,6 @@ import data.Data;
 import data.DataFactory;
 import evaluation.Metrics;
 import evaluation.MetricsA;
-import evaluation.SamplingMetrics;
 import exception.DatasetException;
 import exception.PcaException;
 import io.DataTO;
@@ -31,14 +30,14 @@ public class Runner {
 		
 		//Console args
 		String fileName = args[0];
-		String filePath = "dataset/"+ fileName + ".arff";
+		String filePath = "../dataset/"+ fileName + ".arff";
 		String datasetType = args[1]; //auto - dataset
-		String autocorrelationType = null;
-		String radius = null;
-		String q = null;
 		String centroidsNumber = args[2]; //numero di centroidi
 		String pca = args[3]; 
 		Double samplingPerc = Double.parseDouble(args[4]); //if >= 1, do not sample
+		String autocorrelationType = null;
+		String radius = null;
+		String q = null;
 		
 		System.out.println("START");
 		System.out.print("loading data");
@@ -128,26 +127,8 @@ public class Runner {
 			
 			ClusterSet sampledSet = new Sampling(samplingPerc, clusterSet).compute();
 			PAM.setClusterSet(sampledSet);
-			csvName = args[0] + "_" + args[1] + "_" + args[2] + "_" + args[3] + "_sampling"+samplingPerc;
+			csvName = args[0] + "_" + args[1] + "_" + args[2] + "_" + args[3] + "_sampling_"+samplingPerc;
 			PAM.exportCsv(csvName);
-			System.out.println("Recomputing metrics...");
-			metrics = new SamplingMetrics(sampledSet, data);
-			
-			System.out.print("purity: ");
-			System.out.println(metrics.purity());
-			
-			System.out.print("rand index: ");
-			System.out.println(metrics.randIndex());
-			
-			System.out.print("precision: ");
-			System.out.println(metrics.precision());
-			
-			System.out.print("recall: ");
-			System.out.println(metrics.recall());
-			
-			beta = 1d;
-			System.out.print("F" + beta + " score: ");
-			System.out.println(metrics.fScore(beta));	
 		}
 		//-------------------------------------------------------------------------------------------------------------------------------------
 		

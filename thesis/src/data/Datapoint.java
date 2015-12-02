@@ -112,9 +112,9 @@ public class Datapoint implements Iterable<Double>, Comparable<Datapoint> {
 		short x = this.spatialFeatures.get(0).getValue();
 		short y = this.spatialFeatures.get(1).getValue();
 		String result = this.pointID + ";" + (x + 1) + ";" + (y + 1) + ";";
-		for(Object value : this.values){ 
+		/*for(Object value : this.values){ 
 			result += value + ";";
-		}
+		}*/
 		return result;
 	}
 

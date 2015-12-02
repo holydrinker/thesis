@@ -3,7 +3,7 @@ package sampling;
 import clustering.Cluster;
 import data.Datapoint;
 
-public class MBR extends Quadrant {
+public class MBR {
 	private short minX;
 	private short maxX;
 	private short minY;
@@ -39,11 +39,11 @@ public class MBR extends Quadrant {
 	}
 	
 	double getCentreX(){
-		return ((double)(maxX - minX)) / 2;
+		return minX + ((double)(maxX - minX + 1)) / 2;
 	}
 	
 	double getCentreY(){
-		return ((double)(maxY - minY)) / 2;
+		return minY + ((double)(maxY - minY + 1)) / 2;
 	}
 
 	Datapoint determineCentre(Cluster cluster, int beginExampleIndex, int endExampleIndex){

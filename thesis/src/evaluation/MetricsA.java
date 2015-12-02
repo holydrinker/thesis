@@ -7,7 +7,7 @@ import data.Datapoint;
 
 public abstract class MetricsA {
 	protected ClusterSet clusterSet;
-	protected ClusterAssignment assignm = new ClusterAssignment();
+	protected ClusterAssignment assignm;
 	
 	protected int TP;
 	protected int FP;
@@ -20,13 +20,23 @@ public abstract class MetricsA {
 
 	public MetricsA(ClusterSet clusterSet, Data data) {
 		this.clusterSet = clusterSet;
-		setClusterAssignment(data);
+		assignm = new ClusterAssignment(data.size());
+		//setClusterAssignment(data);
+		setClusterAssignment(clusterSet);
 		setParams(data);
 	}
 	
 	private void setClusterAssignment(Data data){
 		for (Datapoint datapoint : data) {
 			assignm.addRecord(datapoint.getID(), datapoint.getClassID(), datapoint.getClusterID());
+		}
+	}
+	
+	private void setClusterAssignment(ClusterSet clusterSet){
+		for(Cluster cluster : clusterSet){
+			for(Datapoint point : cluster){
+				assignm.addRecord(point.getID(), point.getClassID(), point.getClusterID());
+			}
 		}
 	}
 	

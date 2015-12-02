@@ -16,11 +16,11 @@ public abstract class Clustering {
 	public abstract void generateClusters();
 	
 	public void exportCsv(String csvName){
-		this.clusterSet.exportCsv(csvName, data);
+		clusterSet.exportCsv(csvName, data.getFeatureVector());
 	}
 	
 	public ClusterSet getClusterSet(){
-		return this.clusterSet;
+		return clusterSet;
 	}
 	
 	public void setClusterSet(ClusterSet clusterSet){

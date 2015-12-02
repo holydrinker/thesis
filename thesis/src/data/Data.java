@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import evaluation.Metrics;
 import io.DataTO;
 import io.DatapointTO;
 import io.FeatureVectorTO;
@@ -17,7 +16,7 @@ public abstract class Data implements Iterable<Datapoint> {
 	public Data(FeatureVectorTO fvTO, DataTO stream) {
 		fv = new FeatureVector(fvTO);
 		
-		//BUILD MATRIX
+		//BUILD MATRIX SCHEMA
 		int width = -1;
 		int height = -1;
 		
@@ -26,14 +25,14 @@ public abstract class Data implements Iterable<Datapoint> {
 			LinkedList<Object> params = dpTO.get();
 			
 			//In pos 0 and in pos 1 DatapointTO contains the coordinates
-			int row = ((Double)params.get(0)).intValue() - 1;
-			int col = ((Double)params.get(1)).intValue() - 1;
+			int x = ((Double)params.get(0)).intValue() - 1;
+			int y = ((Double)params.get(1)).intValue() - 1;
 			
 			//update width e height
-			if(col > width)
-				width = col;
-			if(row > height)
-				height = row;			
+			if(y > width)
+				width = y;
+			if(x > height)
+				height = x;			
 		}
 		datapoints = new Datapoint[height+1][width+1];
 		
@@ -75,8 +74,8 @@ public abstract class Data implements Iterable<Datapoint> {
 		return this.size;
 	}
 	
-	public Datapoint getDatapoint(short row, short col){
-		return this.datapoints[row][col];
+	public Datapoint getDatapoint(short x, short y){
+		return this.datapoints[x][y];
 	}
 	
 	public Datapoint getDatapoint(short id){
@@ -94,10 +93,8 @@ public abstract class Data implements Iterable<Datapoint> {
 	 * verifica che il valore assegnato sia un valore consentito dalla feature stessa
 	 */
 	protected void scaling(){
-		final int FIRST_VALUE = 0;
-		
 		for(Datapoint dp : this){
-			int i = FIRST_VALUE;
+			int i = 0;
 		
 			for(Object obj : fv){
 				Feature f = (Feature)obj;

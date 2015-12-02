@@ -5,9 +5,9 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Set;
 
-import data.Data;
 import data.Datapoint;
 import data.Feature;
+import data.FeatureVector;
 
 public class ClusterSet implements Iterable<Cluster> {
 	private Set<Cluster> clusters;
@@ -16,16 +16,16 @@ public class ClusterSet implements Iterable<Cluster> {
 		this.clusters = clusters;
 	}
 
-	void exportCsv(String csvName, Data data){
+	public void exportCsv(String csvName, FeatureVector featureVector){ // change to package visibility
 		try {
-			PrintWriter pw = new PrintWriter("output/"+ csvName +".csv");
+			PrintWriter pw = new PrintWriter("../output/"+ csvName +".csv"); //CHANGE
 			
 			//Write feature vector
 			String nextLine = "clusterID;pixelID;coord_X;coord_Y;";
-			for(Feature feature : data.getFeatureVector()){
+			for(Feature feature : featureVector){
 				nextLine += (feature.getName() + ";");
 			}
-			nextLine = nextLine.substring(0, nextLine.length() - 1);
+			//nextLine = nextLine.substring(0, nextLine.length() - 1);
 			pw.println(nextLine);
 			
 			//Write clusters
@@ -33,7 +33,7 @@ public class ClusterSet implements Iterable<Cluster> {
 				short clusterID = cluster.getID();
 				for(Datapoint dp : cluster){
 					nextLine = clusterID + ";" + dp.toString();
-					nextLine = nextLine.substring(0, nextLine.length() - 1);
+					//nextLine = nextLine.substring(0, nextLine.length() - 1); //forse così stampa l'ultimo. dopo il test cancellare
 					pw.println(nextLine);
 				}
 			}
@@ -43,6 +43,14 @@ public class ClusterSet implements Iterable<Cluster> {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public short size(){
+		int count = 0;
+		for(Cluster cluster : this){
+			count += cluster.size();
+		}
+		return (short)count;
 	}
 	
 	@Override

@@ -1,7 +1,6 @@
 package clustering;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import data.Datapoint;
@@ -22,11 +21,11 @@ public class Cluster implements Iterable<Datapoint>{
 
 	private void setClusterAssignment(){
 		if(medoid != null){
-			medoid.setClusterID(this.id);
+			medoid.setClusterID(id);
 		}
 		
-		for(Datapoint datapoint : this.data){
-			datapoint.setClusterID(this.id);
+		for(Datapoint datapoint : data){
+			datapoint.setClusterID(id);
 		}
 	}
 	
@@ -47,7 +46,6 @@ public class Cluster implements Iterable<Datapoint>{
 			if(this.medoid.equals(datapoint))
 				return true;
 		}
-		
 		
 		for(Datapoint point : data){
 			if(point.equals(datapoint))
@@ -72,10 +70,10 @@ public class Cluster implements Iterable<Datapoint>{
 			minY = this.medoid.getY();
 			maxY = this.medoid.getY();
 		} else {
-			minX = data.get(0).getX();
-			maxX = data.get(0).getX();
-			minY = data.get(0).getY();
-			maxY = data.get(0).getY();
+			minX = data.get(beginExampleIndex).getX();
+			maxX = data.get(beginExampleIndex).getX();
+			minY = data.get(beginExampleIndex).getY();
+			maxY = data.get(beginExampleIndex).getY();
 			beginExampleIndex++;
 		}
 		
@@ -97,12 +95,16 @@ public class Cluster implements Iterable<Datapoint>{
 			}
 		}
 		
-		return new MBR(minX, minY, maxX, maxY, this.size());
+		return new MBR(minX, minY, maxX, maxY, (short)(endExampleIndex - beginExampleIndex + 1)); //prima per la cardinalità c'era this.size
 	}
 	
 	public void sort(int spatialFeatureIdx, int begin, int end){
 		//aggiunto il medoide alla lista, per trattare tutto in un'unica struttura dati
-		this.data.add(this.medoid);
+		if(medoid != null){
+			data.add(this.medoid);
+			medoid = null;
+		}
+		
 		//chiamo il quicksort che ordina la lista di dati appena creata
 		quicksort(spatialFeatureIdx, begin, end);
 	}
@@ -202,6 +204,15 @@ public class Cluster implements Iterable<Datapoint>{
 		return this.id == otherCluster.id;
 	}
 	
+	public void printCoord(){ //cancellare quando funziona tutto
+		System.out.println("PRINT COORD");
+		String result = "";
+		for(Datapoint point : this){
+			result += "(" + point.getX() + "," + point.getY() + ") ";
+		}
+		System.out.println(result);
+	}
+	
 	@Override
 	public String toString() {
 		String result = "";
@@ -212,26 +223,5 @@ public class Cluster implements Iterable<Datapoint>{
 		
 		return result;
 	}
-	
-	/*public static void main(String[] args) {
-		LinkedList<Datapoint> list = new LinkedList<Datapoint>();
-		list.add(new Datapoint((short)0, (short)5));
-		list.add(new Datapoint((short)3, (short)5));
-		list.add(new Datapoint((short)4, (short)20));
-		list.add(new Datapoint((short)10, (short)19));
-		list.add(new Datapoint((short)9, (short)8));
-		list.add(new Datapoint((short)15, (short)4));
-		list.add(new Datapoint((short)7, (short)4));
-		list.add(new Datapoint((short)7, (short)4));
-		Cluster c = new Cluster((short)0, null, list);
-		MBR mbr = c.computeMBR(0, c.size()-1);
-		System.out.println("minX: " + mbr.getMinX());
-		System.out.println("maxX: " + mbr.getMaxX());
-		System.out.println("minY: " + mbr.getMinY());
-		System.out.println("maxY: " + mbr.getMaxY());
-		System.out.println("cardinality: " + mbr.getCardinality());
-		System.out.println("getCentreX: " + mbr.getCentreX());
-		System.out.println("getCentreY: " + mbr.getCentreY());
-	}*/
 
 }

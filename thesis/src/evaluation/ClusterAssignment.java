@@ -1,40 +1,32 @@
 package evaluation;
 
-import java.util.LinkedList;
-
 /**
- * Each record is iserted in the position of the correspondin datapoint's ID.
+ * Each record is inserted in the position of the correspondin datapoint's ID.
  * Each rcord save che datapoint's class ID and his cluster ID.
  * @author holydrinker
  *
  */
 public class ClusterAssignment {
-	private LinkedList<Record> list = new LinkedList<Record>();
+	private Record[] rlist;
+	
+	public ClusterAssignment(int size) {
+		rlist = new Record[size];
+	}
 	
 	public void addRecord(short pointID, short classID, short clusterID){
-		list.add(pointID, new Record(classID, clusterID));
+		rlist[pointID] = new Record(classID, clusterID);
 	}
 
 	public short getClassID(short pointID){
-		return this.list.get(pointID).getClassID();
+		return this.rlist[pointID].getClassID();
 	}
 	
 	public short getClusterID(short pointID){
-		return this.list.get(pointID).getClusterID();
+		return this.rlist[pointID].getClusterID();
 	}
 	
 	public int size(){
-		return this.list.size();
-	}
-	
-	@Override
-	public String toString() {
-		String result = "";
-		for(int i = 0; i < this.list.size(); i++){
-			Record record = list.get(i);
-			result += "[" + i + " - " + record.toString() + "]\n";
-		}
-		return result;
+		return this.rlist.length;
 	}
 	
 	private class Record{
