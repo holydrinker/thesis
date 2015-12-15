@@ -2,6 +2,6 @@
 
 My thesis project for my Bachelor's Degree in Computer Science (ITPS curriculum) @ University of Bari.
 
-- Title: coming soon...
+- Title: "Tecniche di Segmentazione di Immagini Iperspettrali"
 
-- Supervisor: prof. Annalisa Appice http://www.di.uniba.it/~appice/
+- Supervisor: Dr. Annalisa Appice http://www.di.uniba.it/~appice/
