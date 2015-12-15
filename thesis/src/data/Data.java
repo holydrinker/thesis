@@ -3,7 +3,10 @@ package data;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
+import evaluation.ClusterAssignment;
 import io.DataTO;
 import io.DatapointTO;
 import io.FeatureVectorTO;
@@ -12,11 +15,12 @@ public abstract class Data implements Iterable<Datapoint> {
 	protected FeatureVector fv;
 	protected Datapoint[][] datapoints;
 	protected short size = 0;
+	private ClusterAssignment assignm = new ClusterAssignment();
 	
 	public Data(FeatureVectorTO fvTO, DataTO stream) {
 		fv = new FeatureVector(fvTO);
 		
-		//BUILD MATRIX SCHEMA
+		//BUILD MATRIX
 		int width = -1;
 		int height = -1;
 		
@@ -37,7 +41,7 @@ public abstract class Data implements Iterable<Datapoint> {
 		datapoints = new Datapoint[height+1][width+1];
 		
 		//POPULATE MATRIX
-		short pointID = 0;
+		short id = 0;
 		final int X = 0;
 		final int Y = 1;
 		
@@ -47,15 +51,22 @@ public abstract class Data implements Iterable<Datapoint> {
 			
 			int x = ((Double)params.get(X)).intValue() - 1;
 			int y = ((Double)params.get(Y)).intValue() - 1;
-			short classID = (short) ((Double) params.removeLast()).intValue();
+			short classID = (short) ((Double)params.removeLast()).intValue();
 			
-			Datapoint dp = new Datapoint(pointID++, new DatapointTO(params));
-			dp.setClass(classID);
+			Datapoint dp = new Datapoint(id, new DatapointTO(params));
+			dp.setClassID(classID);
+			assignm.addRecord(id, classID);
+			id++;
 			
 			fv.updateMinMax(dp);
 			datapoints[x][y] = dp;
 			size++;
 		}
+	
+	}
+	
+	public ClusterAssignment getClusterAssignment(){
+		return this.assignm;
 	}
 	
 	public FeatureVector getFeatureVector(){
@@ -78,23 +89,16 @@ public abstract class Data implements Iterable<Datapoint> {
 		return this.datapoints[x][y];
 	}
 	
-	public Datapoint getDatapoint(short id){
-		for(Datapoint datapoint : this){
-			if(datapoint.getID() == id){
-				return datapoint;
-			}
-		}
-		return null;
-	}
-	
 	/**
 	 * Una volta popolato il dataset, itera e per ogni valore di ogni datapoint fa il seguente controllo:
 	 * se il valore è associato ad una feature continua lo scala, se il valore è associato ad una feature discreta,
 	 * verifica che il valore assegnato sia un valore consentito dalla feature stessa
 	 */
 	protected void scaling(){
+		final int FIRST_VALUE = 0;
+		
 		for(Datapoint dp : this){
-			int i = 0;
+			int i = FIRST_VALUE;
 		
 			for(Object obj : fv){
 				Feature f = (Feature)obj;
@@ -102,7 +106,7 @@ public abstract class Data implements Iterable<Datapoint> {
 		
 				if (f instanceof DiscreteFeature) {
 					if (!checkDiscreteValue((DiscreteFeature) f, value))
-						throw new InvalidDiscreteFeature(value + " is not a  valid value for feature: " + f.name);
+						throw new InvalidDiscreteFeature(value + " is not a  valid value for feature: " + f.getName());
 				} else if (f instanceof ContinueFeature) {
 					double newValue = ((ContinueFeature) f).getScaled(value);
 					dp.setValue(i, newValue);
@@ -158,16 +162,6 @@ public abstract class Data implements Iterable<Datapoint> {
 				return datapoints[y][x++];
 			}
 		};
-	}
-	
-	//DA CANCELLARE QUANDO LE AUTOCORRELAZIONI SONO STATE TESTATE PER BENE
-	public void printAutocorrelationTest(int featureIdx){
-		for(int row = 0; row < this.getHeight(); row++){
-			for(int col = 0; col < this.getWidth(); col++){
-				System.out.print(this.datapoints[row][col].getValue(featureIdx) + "  ");
-			}
-			System.out.println("");
-		}
 	}
 
 }

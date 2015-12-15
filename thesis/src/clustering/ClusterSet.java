@@ -16,16 +16,16 @@ public class ClusterSet implements Iterable<Cluster> {
 		this.clusters = clusters;
 	}
 
-	public void exportCsv(String csvName, FeatureVector featureVector){ // change to package visibility
+	public void exportCsv(String csvName, FeatureVector fv){
 		try {
-			PrintWriter pw = new PrintWriter("../output/"+ csvName +".csv"); //CHANGE
+			PrintWriter pw = new PrintWriter(csvName +".csv"); //levare il primo output per il sampling
 			
 			//Write feature vector
 			String nextLine = "clusterID;pixelID;coord_X;coord_Y;";
-			for(Feature feature : featureVector){
+			for(Feature feature : fv){
 				nextLine += (feature.getName() + ";");
 			}
-			//nextLine = nextLine.substring(0, nextLine.length() - 1);
+			nextLine = nextLine.substring(0, nextLine.length() - 1);
 			pw.println(nextLine);
 			
 			//Write clusters
@@ -33,7 +33,7 @@ public class ClusterSet implements Iterable<Cluster> {
 				short clusterID = cluster.getID();
 				for(Datapoint dp : cluster){
 					nextLine = clusterID + ";" + dp.toString();
-					//nextLine = nextLine.substring(0, nextLine.length() - 1); //forse così stampa l'ultimo. dopo il test cancellare
+					nextLine = nextLine.substring(0, nextLine.length() - 1);
 					pw.println(nextLine);
 				}
 			}
@@ -44,28 +44,17 @@ public class ClusterSet implements Iterable<Cluster> {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public short size(){
 		int count = 0;
 		for(Cluster cluster : this){
 			count += cluster.size();
 		}
-		return (short)count;
+		return (short) count;
 	}
 	
 	@Override
 	public Iterator<Cluster> iterator() {
 		return this.clusters.iterator();
 	}
-	
-	@Override
-	public String toString() {
-		String result = "[ ";
-		for(Cluster cluster : this.clusters){
-			result += cluster.getID() + " ";
-		}
-		return result += "]";
-	}
-	
-	
 }

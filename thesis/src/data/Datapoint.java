@@ -9,12 +9,11 @@ import java.util.List;
 
 public class Datapoint implements Iterable<Double>, Comparable<Datapoint> {
 	private short pointID;
-	private short classID = -1;
-	private short clusterID = -1;
-	private List<SpatialFeature> spatialFeatures = new ArrayList<SpatialFeature>();
+	private List<SpatialFeature> spatialFeature = new ArrayList<SpatialFeature>();
+	private short classID;
 	private LinkedList<Double> values = new LinkedList<Double>(); 
 	
-	public Datapoint(short pointID, DatapointTO to){
+	public Datapoint(short pointID, DatapointTO to){ 
 		this.pointID = pointID;
 		LinkedList<Object> params = to.get();
 
@@ -22,66 +21,54 @@ public class Datapoint implements Iterable<Double>, Comparable<Datapoint> {
 		final int Y_POS = 1;
 		final int FIRST_VALUE_POS = 2;
 		
-		short xValue = (short) (((Double)params.get(X_POS)).intValue() - 1);
-		short yValue = (short) (((Double)params.get(Y_POS)).intValue() - 1);
-		SpatialFeature x = new SpatialFeature("x", xValue);
-		SpatialFeature y = new SpatialFeature("y", yValue);
-		spatialFeatures.add(0, x);
-		spatialFeatures.add(1, y);
-
+		short x = (short) (((Double)params.get(X_POS)).intValue() - 1);
+		short y = (short) (((Double)params.get(Y_POS)).intValue() - 1);
+		spatialFeature.add(0, new SpatialFeature("x", x));
+		spatialFeature.add(1, new SpatialFeature("y", y));
+		
 		for(int i = FIRST_VALUE_POS; i < params.size(); i++)
-			values.add((Double)params.get(i));		
+			values.add((Double)params.get(i));
 	}
 	
 	public Datapoint(short x, short y) {
-		SpatialFeature xSF = new SpatialFeature("x", (short)x);
-		SpatialFeature ySF = new SpatialFeature("y", (short)y);
-		this.spatialFeatures.add(0, xSF);
-		this.spatialFeatures.add(1, ySF);
+		this.spatialFeature.add(0, new SpatialFeature("x", x));
+		this.spatialFeature.add(1, new SpatialFeature("y", y));
 	}
 	
 	public Datapoint(short pointID) {
 		this.pointID = pointID;
 	}
 	
-	public short getID(){
-		return this.pointID;
-	}
-	
 	public short getX(){
-		return this.spatialFeatures.get(0).getValue();
+		return this.spatialFeature.get(0).getValue();
 	}
 	
 	public void setX(short x){
-		this.spatialFeatures.get(0).setValue(x);
+		if(spatialFeature.size() == 0){
+			spatialFeature.add(0, new SpatialFeature("x", x));
+		} else {
+			spatialFeature.get(0).setValue(x);
+		}
 	}
 	
 	public short getY(){
-		return this.spatialFeatures.get(1).getValue();
+		return this.spatialFeature.get(1).getValue();
 	}
 	
 	public void setY(short y){
-		this.spatialFeatures.get(1).setValue(y);
+		if(spatialFeature.size() <= 1){
+			spatialFeature.add(1, new SpatialFeature("y", y));
+		} else {
+			spatialFeature.get(1).setValue(y);
+		}
 	}
 	
 	public short getSpatialFeature(int index){
-		return this.spatialFeatures.get(index).getValue();
+		return this.spatialFeature.get(index).getValue();
 	}
 	
-	public short getClusterID(){
-		return this.clusterID;
-	}
-	
-	public void setClusterID(short clusterID){
-		this.clusterID = clusterID;
-	}
-	
-	public short getClassID(){
-		return this.classID;
-	}
-	
-	public void setClass(short classID){
-		this.classID = classID;
+	public short getID(){
+		return this.pointID;
 	}
 	
 	public Double getValue(int idx){
@@ -94,6 +81,14 @@ public class Datapoint implements Iterable<Double>, Comparable<Datapoint> {
 	
 	public void addValue(double value){
 		this.values.add(value);
+	}
+
+	public void setClassID(short classID){
+		this.classID = classID;
+	}
+	
+	public short getClassID(){
+		return this.classID;
 	}
 	
 	@Override
@@ -109,12 +104,11 @@ public class Datapoint implements Iterable<Double>, Comparable<Datapoint> {
 	
 	@Override
 	public String toString() {
-		short x = this.spatialFeatures.get(0).getValue();
-		short y = this.spatialFeatures.get(1).getValue();
-		String result = this.pointID + ";" + (x + 1) + ";" + (y + 1) + ";";
-		/*for(Object value : this.values){ 
+		String result = this.pointID + ";" + (this.getX() + 1) + ";" + (this.getY() + 1) + ";";
+		for(Object value : this.values){ 
 			result += value + ";";
-		}*/
+		}
+		result = result.substring(0, result.length()-1); //togli l'ultima virgola
 		return result;
 	}
 

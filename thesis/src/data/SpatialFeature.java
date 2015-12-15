@@ -7,12 +7,13 @@ public class SpatialFeature extends Feature {
 		super(name);
 		this.value = value;
 	}
-	
-	public short getValue(){
+
+	short getValue(){
 		return this.value;
 	}
-
-	public void setValue(short value){
+	
+	void setValue(short value){
 		this.value = value;
 	}
+	
 }

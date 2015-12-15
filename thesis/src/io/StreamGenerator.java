@@ -98,5 +98,23 @@ public class StreamGenerator {
 	public DataTO getDataTO(){
 		return this.dataTO;
 	}
+
+	/*public static void main(String[] args) {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("dataset/temp_indianpine.arff"));
+			
+			String line = br.readLine();
+			while(line != null){
+				System.out.println(line);
+				line = br.readLine();
+			}
+			br.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}*/
 	
 }

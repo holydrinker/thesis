@@ -6,13 +6,17 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class FeatureVector implements Iterable<Feature>{
-	private LinkedList<Feature> features = new LinkedList<Feature>();
+	public LinkedList<Feature> features = new LinkedList<Feature>();
 	
 	public FeatureVector(FeatureVectorTO to) {
 		LinkedList<Object> params = to.get();
 		for(int i = 0; i < params.size()-1; i++){
 			features.add((Feature)params.get(i));
 		}
+		/*
+		for(Object obj : to.get())
+			features.add((Feature)obj);
+			*/
 	}
 	
 	public Feature getFeature(int idx){
@@ -41,7 +45,7 @@ public class FeatureVector implements Iterable<Feature>{
 	public String toString() {
 		String result = "";
 		for(Feature feature : this){
-			result += feature.name + " ";
+			result += feature.getName() + " ";
 		}
 		return result;
 	}

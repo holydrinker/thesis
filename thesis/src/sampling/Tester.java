@@ -13,7 +13,7 @@ public class Tester {
 
 	public static void main(String[] args) {
 		//Cluster cluster = generateCluster();
-		Cluster reCluster = new ClusterRebuilder().compute();
+		Cluster reCluster = new ClusterRebuilder("", null).compute();
 		Set<Cluster> set = new HashSet<Cluster>();
 		//set.add(cluster);
 		set.add(reCluster);
@@ -65,7 +65,7 @@ public class Tester {
 		list.add(new Datapoint((short)8, (short)2));
 		list.add(new Datapoint((short)9, (short)2));
 				
-		Cluster cluster = new Cluster((short)0, medoid, list);
+		Cluster cluster = new Cluster((short)0, medoid, list, null);
 		return cluster;
 	}
 

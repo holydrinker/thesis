@@ -4,7 +4,6 @@ import java.util.HashSet;
 
 import data.Data;
 import data.Datapoint;
-import data.Feature;
 import distance.WeightI;
 
 public class GetisOrdSingleFeature {

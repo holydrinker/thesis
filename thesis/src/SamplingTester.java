@@ -4,20 +4,19 @@ import sampling.Sampling;
 
 public class SamplingTester {
 
-	public static void main(String[] args) {
-		String fileName = "indianpine";
-		String dataType = "dataset";
-		String k = "16";
-		String pca = "nopca";
+	public static void main(String[] args) {		
+		double perc = 0.2;
 		
-		double perc = 0.05;
+		//Rebuild dataset
+		String outputPath = "../output/indianpine_auto_20_pca.csv";
+		ClusterRebuilder rebuilder = new ClusterRebuilder(outputPath, null);
+		ClusterSet clusterSet = rebuilder.compute();
 		
-		ClusterSetRebuilder rebuilder = new ClusterSetRebuilder(fileName, dataType, k, pca);
-		ClusterSet clusterSet = rebuilder.generate(null);
-		
+		//Sample dataset
 		ClusterSet sampledSet = new Sampling(perc, clusterSet).compute(); 
 		
-		String writeName = rebuilder.getNameForWrites();
+		//Export sampled data
+		String writeName = outputPath + "_sampling_" + perc;
 		System.out.println("Write in: " + writeName);
 		sampledSet.exportCsv(writeName, rebuilder.getFeatureVector());
 		System.out.println("from " + clusterSet.size() + " to " + sampledSet.size());

@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import data.Datapoint;
+import evaluation.ClusterAssignment;
 import sampling.MBR;
 
 public class Cluster implements Iterable<Datapoint>{
@@ -11,34 +12,26 @@ public class Cluster implements Iterable<Datapoint>{
 	private Datapoint medoid;
 	private List<Datapoint> data;
 	
-	public Cluster(short clusterID, Datapoint medoid, List<Datapoint> datapoints) {
+	public Cluster(short clusterID, Datapoint medoid, List<Datapoint> data, ClusterAssignment assignm) {
 		this.id = clusterID;
 		this.medoid = medoid;
-		this.data = datapoints;
+		this.data = data;
 		
-		setClusterAssignment();
+		if(assignm != null){ //else I'm doing samping
+			assignm.setClusterID(medoid.getID(), clusterID);
+			for(Datapoint dp : data){
+				assignm.setClusterID(dp.getID(), clusterID);
+			}
+		}
+		
 	}
 
-	private void setClusterAssignment(){
-		if(medoid != null){
-			medoid.setClusterID(id);
-		}
-		
-		for(Datapoint datapoint : data){
-			datapoint.setClusterID(id);
-		}
+	public Datapoint getMedoid(){
+		return this.medoid;
 	}
 	
 	public short getID(){
 		return this.id;
-	}
-	
-	public short size(){
-		int size = data.size();
-		if(medoid != null){
-			size++;
-		}
-		return (short) size;
 	}
 	
 	public boolean contains(Datapoint datapoint){
@@ -52,6 +45,10 @@ public class Cluster implements Iterable<Datapoint>{
 				return true;
 		}
 		return false;
+	}
+	
+	public short size(){
+		return (short) (this.data.size() + 1);
 	}
 	
 	public Datapoint getDatapoint(int index){
@@ -204,23 +201,12 @@ public class Cluster implements Iterable<Datapoint>{
 		return this.id == otherCluster.id;
 	}
 	
-	public void printCoord(){ //cancellare quando funziona tutto
-		System.out.println("PRINT COORD");
-		String result = "";
-		for(Datapoint point : this){
-			result += "(" + point.getX() + "," + point.getY() + ") ";
-		}
-		System.out.println(result);
-	}
-	
 	@Override
 	public String toString() {
 		String result = "";
-		
 		for(Datapoint datapoint : this){
 			result += datapoint.toString() + "\n";
 		}
-		
 		return result;
 	}
 

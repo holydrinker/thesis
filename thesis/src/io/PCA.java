@@ -64,7 +64,7 @@ public class PCA {
 			pca.setCenterData(true);
 			pca.setVarianceCovered(0.99);
 			pca.setInputFormat(dataset);
-			pca.setOptions("-R 0.99 -A 5 -M -1 -C".split(" "));
+			pca.setOptions("-R 1 -A 5 -M -1 -C".split(" "));
 			newDataset = Filter.useFilter(dataset, pca);
 			
 			//Renaming

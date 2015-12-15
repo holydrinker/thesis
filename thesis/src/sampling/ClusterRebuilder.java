@@ -1,7 +1,6 @@
 package sampling;
 
 
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,16 +10,24 @@ import java.util.List;
 import clustering.Cluster;
 import data.Datapoint;
 import data.FeatureVector;
+import evaluation.ClusterAssignment;
 import io.DatapointTO;
 
 public class ClusterRebuilder {
 	private FeatureVector fv;
+	private String filePath;
+	private ClusterAssignment assignm;
+
+	public ClusterRebuilder(String filePath, ClusterAssignment assignm) {
+		this.filePath = filePath;
+		this.assignm = assignm;
+	}
 	
 	public Cluster compute(){
 		Cluster cluster = null;
 		
 		try {
-			BufferedReader br = new BufferedReader(new FileReader("../output/indianpine_dataset_16_nopca.csv"));
+			BufferedReader br = new BufferedReader(new FileReader(filePath));
 			String line = br.readLine();
 			line = br.readLine(); //skip the feature vector line
 			String splitLine[] = line.split(";");
@@ -53,7 +60,7 @@ public class ClusterRebuilder {
 			
 			br.close();
 			System.out.println(oldClusterID);
-			cluster = new Cluster((short) oldClusterID, null, list);
+			cluster = new Cluster((short) oldClusterID, null, list, assignm);
 			
 		} catch (IOException e) {
 			e.printStackTrace();

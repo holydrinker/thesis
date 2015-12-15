@@ -16,7 +16,7 @@ public class SingleClusterQuadSampling extends SingleClusterSampling{
 	@Override
 	Cluster compute(Cluster cluster) {
 		List<Datapoint> keyPoints = decomposer.computeCentroids(cluster, perc);
-		return new Cluster(cluster.getID(), null, keyPoints);
+		return new Cluster(cluster.getID(), null, keyPoints, null);
 	}
 	
 }

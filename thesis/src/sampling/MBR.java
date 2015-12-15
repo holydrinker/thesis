@@ -52,7 +52,7 @@ public class MBR {
 		double cX = (minX + maxX) / 2;
 		double cY= (minY + maxY) / 2;
 		
-		double minDist = Math.pow(cX - centre.getSpatialFeature(0), 2) + Math.pow(cY - centre.getSpatialFeature(1), 2);
+		double minDist = Math.pow(cX - centre.getX(), 2) + Math.pow(cY - centre.getY(), 2);
 	
 		for(int i = beginExampleIndex+1; i <= endExampleIndex; i++){
 			Datapoint dp = cluster.getDatapoint(i);

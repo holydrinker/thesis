@@ -10,7 +10,6 @@ import distance.WeightI;
 
 public class GetisOrd implements AutocorrelationI {
 	private WeightI weight;
-	private double Z;
 	
 	public GetisOrd(WeightI weight) {
 		this.weight = weight;
@@ -19,7 +18,13 @@ public class GetisOrd implements AutocorrelationI {
 	@Override
 	public Datapoint compute(Data data, short x, short y, short radius) {
 		Datapoint oldPoint = data.getDatapoint(x, y);
-		Datapoint newPoint = new Datapoint(x, y);
+		short pointID = oldPoint.getID();
+		short classID = oldPoint.getClassID();
+		
+		Datapoint newPoint = new Datapoint(pointID);
+		newPoint.setX(x);
+		newPoint.setY(y);
+		newPoint.setClassID(classID);
 		
 		HashSet<Datapoint> neighborhood = computeNeighborhood(data, x, y, radius);
 		
@@ -86,6 +91,12 @@ public class GetisOrd implements AutocorrelationI {
 			}
 		}
 		//System.out.println("}");
+		/*String s = "";
+		for(Datapoint dp : neighborhood){
+			s += dp.getValue(1) + " ";
+		}
+		s += " => ";
+		System.out.println("NB: " + s);*/
 		return neighborhood;
 	}
 }

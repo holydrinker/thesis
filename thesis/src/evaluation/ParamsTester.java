@@ -1,23 +1,18 @@
 package evaluation;
 
 import data.Dataset;
-
-import java.util.HashSet;
-import java.util.LinkedList;
-
-import clustering.Cluster;
 import clustering.ClusterSet;
-import data.Datapoint;
 import io.StreamGenerator;
 
 public class ParamsTester {
 
 	public static void main(String[] args) {
 		//Dataset
-		StreamGenerator sg = new StreamGenerator("../dataset/evaluation.arff");
-		Dataset dataset = new Dataset(sg.getFeatureVectorTO(), sg.getDataTO(), true);
+		StreamGenerator sg = new StreamGenerator("../dataset/indianpine.arff");
+		Dataset data = new Dataset(sg.getFeatureVectorTO(), sg.getDataTO(), true);
+		ClusterAssignment assignm = data.getClusterAssignment();
 		
-		/*ClusterSet*/
+		/*ClusterSet
 		LinkedList<Datapoint> listC1 = new LinkedList<Datapoint>();
 		LinkedList<Datapoint> listC2 = new LinkedList<Datapoint>();
 		LinkedList<Datapoint> listC3 = new LinkedList<Datapoint>();
@@ -28,17 +23,23 @@ public class ParamsTester {
 		for(Datapoint dp : dataset){
 			int id = dp.getID();
 			
-			if(id >= 0 && id <= 4)
+			if(id == 0)
+				medoid1 = dp;
+			else if(id > 0 && id <= 4)
 				listC1.add(dp);
 			else if (id == 5)
 				listC2.add(dp);
 			else if (id == 6 || id == 7)
 				listC3.add(dp);
-			else if (id >= 8 && id <= 11)
+			else if (id == 8)
+				medoid2 = dp;
+			else if (id > 8 && id <= 11)
 				listC2.add(dp);
 			else if (id == 12)
 				listC1.add(dp);
-			else if(id >= 13 && id <= 15)
+			else if (id == 13)
+				medoid3 = dp;
+			else if(id > 13 && id <= 15)
 				listC3.add(dp);
 			else if (id == 16)
 				listC2.add(dp);
@@ -53,13 +54,14 @@ public class ParamsTester {
 		listSet.add(c2);
 		listSet.add(c3);
 		ClusterSet clusterSet = new ClusterSet(listSet);
+		*/
 		
-		/*main
-		String outputPath = "../output/indianpine_auto_16_pca.csv";
-		ClusterSet clusterSet = new ClusterRebuilder(outputPath).compute();
-		System.out.println("Computing metrics...");*/
+		/*main*/
+		String outputPath = "../output/indianpine_dataset_16_nopca.csv";
+		ClusterSet clusterSet = new ClusterRebuilder(outputPath, assignm).compute();
+		System.out.println("Computing metrics...");
 		
-		MetricsA metrics = new Metrics (clusterSet, dataset);
+		MetricsA metrics = new Metrics (clusterSet, data.size(), data.getClusterAssignment());
 		System.out.print("purity: ");
 		System.out.println(metrics.purity());
 		System.out.print("RI: ");

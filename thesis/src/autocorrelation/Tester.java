@@ -1,5 +1,6 @@
 package autocorrelation;
 
+import data.Data;
 import data.Datapoint;
 import data.Dataset;
 import distance.InverseWeight;
@@ -8,52 +9,38 @@ import io.StreamGenerator;
 public class Tester {
 
 	public static void main(String[] args) {
-		System.out.println("autocorrelation.Tester\n");
-		String filePath = "dataset/ac-minitest.txt";
-		
-		//Carico un dataset per il testing del package
-		StreamGenerator sg = new StreamGenerator(filePath);
-		Dataset data = new Dataset(sg.getFeatureVectorTO(), sg.getDataTO(), false);
-		
-		//Stampo il dataset facendo vedere solo la seconda feature, quella che mi interessa, cioè VALUE
-		int featureIdx = 1;
-		System.out.println("DATASET PRE-AUTOCORRELATION");
-		data.printAutocorrelationTest(featureIdx);
-		System.out.println("");
-		
-		//Setting up autcorrelation
+		StreamGenerator sg = new StreamGenerator("../dataset/ac-minitest.arff");
+		Data data = new Dataset(sg.getFeatureVectorTO(), sg.getDataTO(), false);
+		System.out.println(data.toString());
+
 		short radius = 2;
-		byte q = 3;
-		GetisOrd go = new GetisOrd(new InverseWeight(radius, q));
+		byte exp = 3;
+		GetisOrd go = new GetisOrd(new InverseWeight(radius, exp));
+		int featureIDX = 1;
 		
-		// Test
-		short x;
-		short y;
-		
-		//Circondato da valori alti
-		x = 0;
-		y= 0;
-		Datapoint dp1 = go.compute(data, x, y, radius);
-		System.out.println(dp1.getValue(featureIdx));
-		
-		//Circondato da valori bassi
-		x = 5;
-		y = 6;
-		Datapoint dp2 = go.compute(data, x, y, radius);
-		System.out.println(dp2.getValue(featureIdx));
-		
-		//Circondato da valori casuali
-		x = 5;
-		y = 0;
-		Datapoint dp3 = go.compute(data, x, y, radius);
-		System.out.println(dp3.getValue(featureIdx));
-		
-		/*Datapoint dp1 = null;
-		for(int i = 0; i <= 5; i++){
-			for(int j = 0; j <= 6; j++){
-				dp1 = go.compute(data, (short)i, (short)j, radius);
-				System.out.println(dp1.getValue(featureIdx));	
+		for(int x = 0; x < data.getHeight(); x++){
+			for(int y = 0; y < data.getWidth(); y++){
+				int value = (data.getDatapoint((short)x, (short)y).getValue(featureIDX)).intValue();
+				System.out.print(value + " ");
 			}
-		}*/
-	}
+			System.out.println("");
+		}
+		
+		short x = 0;
+		short y = 0;
+		Datapoint attuale = data.getDatapoint(x, y);
+		Datapoint exam = go.compute(data, x, y, radius);
+		double value = exam.getValue(featureIDX);
+		System.out.println("valore attuale: " + attuale.getValue(featureIDX));
+		System.out.println("valore autocorrelato: " + value);
+		
+		x = 0;
+		y = 6;
+		attuale = data.getDatapoint(x, y);
+		exam = go.compute(data, x, y, radius);
+		value = exam.getValue(featureIDX);
+		System.out.println("valore attuale: " + attuale.getValue(featureIDX));
+		System.out.println("valore autocorrelato: " + value);
+	}   
+
 }

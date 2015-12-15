@@ -1,13 +1,16 @@
 package clustering;
 
 import data.Data;
+import evaluation.ClusterAssignment;
 
 public abstract class Clustering {
 	protected Data data;
 	protected ClusterSet clusterSet;
+	protected ClusterAssignment assignm;
 	
-	public Clustering(Data data) {
+	public Clustering(Data data, ClusterAssignment assignm) {
 		this.data = data;
+		this.assignm = assignm;
 	}
 	
 	/*
@@ -16,14 +19,10 @@ public abstract class Clustering {
 	public abstract void generateClusters();
 	
 	public void exportCsv(String csvName){
-		clusterSet.exportCsv(csvName, data.getFeatureVector());
+		this.clusterSet.exportCsv(csvName, data.getFeatureVector());
 	}
 	
 	public ClusterSet getClusterSet(){
-		return clusterSet;
-	}
-	
-	public void setClusterSet(ClusterSet clusterSet){
-		this.clusterSet = clusterSet;
+		return this.clusterSet;
 	}
 }

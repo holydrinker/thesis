@@ -10,13 +10,14 @@ import java.util.Set;
 
 import data.Data;
 import data.Datapoint;
+import evaluation.ClusterAssignment;
 
 public class PAM extends Clustering {
 	private short k;
 	private DistanceMatrix distanceMatrix;
 	
-	public PAM(short k, Data data) {
-		super(data);
+	public PAM(short k, Data data, ClusterAssignment assignm) {
+		super(data, assignm);
 		this.k = k;
 		System.out.print("Building matrix...");
 		this.distanceMatrix = new DistanceMatrix(data);
@@ -81,7 +82,7 @@ public class PAM extends Clustering {
 		for(Entry<Datapoint, LinkedList<Datapoint>> entry : clusterList.entrySet()){
 			Datapoint medoid = entry.getKey();
 			List<Datapoint> list = entry.getValue();
-			Cluster cluster = new Cluster(clusterID++, medoid, list);
+			Cluster cluster = new Cluster(clusterID++, medoid, list, assignm);
 			clusterSet.add(cluster);
 		}
 		

@@ -1,12 +1,12 @@
 package distance;
 
 public abstract class BidimensionalDistance implements DistanceI {
-	protected double x1;
-	protected double y1;
-	protected double x2;
-	protected double y2;
+	protected short x1;
+	protected short y1;
+	protected short x2;
+	protected short y2;
 	
-	public BidimensionalDistance(double x1, double y1, double x2, double y2) {
+	public BidimensionalDistance(short x1, short y1, short x2, short y2) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x2;

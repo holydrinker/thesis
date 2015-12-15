@@ -2,47 +2,26 @@ package evaluation;
 
 import clustering.Cluster;
 import clustering.ClusterSet;
-import data.Data;
 import data.Datapoint;
 
 public abstract class MetricsA {
-	protected ClusterSet clusterSet;
 	protected ClusterAssignment assignm;
+	protected ClusterSet clusterSet;
 	
 	protected int TP;
 	protected int FP;
 	protected int TN;
 	protected int FN;
-	protected final String TP_KEY = "TP";
-	protected final String TN_KEY = "TN";
-	protected final String FP_KEY = "FP";
-	protected final String FN_KEY = "FN";
 
-	public MetricsA(ClusterSet clusterSet, Data data) {
+	public MetricsA(ClusterSet clusterSet, int datasetSize, ClusterAssignment assignm) {
 		this.clusterSet = clusterSet;
-		assignm = new ClusterAssignment(data.size());
-		//setClusterAssignment(data);
-		setClusterAssignment(clusterSet);
-		setParams(data);
+		this.assignm = assignm;
+		setParams(datasetSize);
 	}
 	
-	private void setClusterAssignment(Data data){
-		for (Datapoint datapoint : data) {
-			assignm.addRecord(datapoint.getID(), datapoint.getClassID(), datapoint.getClusterID());
-		}
-	}
+	protected abstract void setParams(int datasetSize);
 	
-	private void setClusterAssignment(ClusterSet clusterSet){
-		for(Cluster cluster : clusterSet){
-			for(Datapoint point : cluster){
-				assignm.addRecord(point.getID(), point.getClassID(), point.getClusterID());
-			}
-		}
-	}
-	
-	protected abstract void setParams(Data data);
-	
-	public double purity() {
+	public double purity(){
 		double result = 0d;
 		int clusterCount = 0;
 		PurityQuantifier pq = null;
@@ -63,22 +42,25 @@ public abstract class MetricsA {
 		
 		return result / clusterCount;
 	}
-
-	public double randIndex() {
+	
+	public double randIndex(){
 		return ((double)(TP + TN)) / (TP + FP + FN + TN);
 	}
-
-	public double precision() {
+	
+	public double precision(){
 		return ((double)TP) / (TP + FP);
 	}
-
-	public double recall() {
+	
+	public double recall(){
 		return ((double)TP) / (TP + FN);
 	}
-
-	public double fScore(double beta) {
-		double num = (Math.sqrt(beta) + 1) * precision() * recall();
-		double den = (Math.sqrt(beta) * precision() + recall());
+	
+	public double fScore(double beta){
+		double P = precision();
+		double R = recall();
+	
+		double num = (Math.pow(beta, 2) + 1) * P * R;
+		double den = (Math.pow(beta,2) * P + R);
 		return num / den;
 	}
 	
